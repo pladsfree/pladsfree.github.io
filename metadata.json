@@ -1,0 +1,6 @@
+{
+  "name": "plAds",
+  "description": "plAds - Free Ad Hosting Platform featuring Home Ad Hub, Image Ads, and Video Ads.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
