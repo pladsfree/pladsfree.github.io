@@ -8,7 +8,7 @@ const state = {
   activeRoute: 'home', // 'home' | 'img' | 'vid' | 'api'
   apiKeys: [],
   domainStats: [],
-  isMobileSidebarOpen: false,
+  isSidebarExpanded: false,
 };
 
 // Router initialization supporting #home, #img, #image, #vid, #video, #api, /enter/api
@@ -36,7 +36,7 @@ function initRouter() {
 function setActiveRoute(route) {
   state.activeRoute = route;
 
-  // Update navbar and sidebar links
+  // Update navbar and expanded sidebar links
   document.querySelectorAll('.nav-link').forEach((link) => {
     const target = link.getAttribute('data-route');
     if (target === route) {
@@ -45,6 +45,18 @@ function setActiveRoute(route) {
     } else {
       link.classList.remove('bg-blue-600', 'text-white', 'shadow-sm');
       link.classList.add('text-slate-600', 'hover:bg-slate-100', 'hover:text-slate-900');
+    }
+  });
+
+  // Update slim rail icon active indicators
+  document.querySelectorAll('.rail-nav-item').forEach((item) => {
+    const target = item.getAttribute('data-route');
+    if (target === route) {
+      item.classList.add('bg-blue-600', 'text-white', 'shadow-xs');
+      item.classList.remove('text-slate-600', 'hover:bg-slate-100');
+    } else {
+      item.classList.remove('bg-blue-600', 'text-white', 'shadow-xs');
+      item.classList.add('text-slate-600', 'hover:bg-slate-100');
     }
   });
 
@@ -68,8 +80,8 @@ function setActiveRoute(route) {
     if (route === 'api') routeBadge.textContent = '/enter/api (API Key Portal)';
   }
 
-  // Close mobile sidebar if open
-  closeMobileSidebar();
+  // Close expanded sidebar if open when navigating
+  closeSidebar();
 
   window.scrollTo({ top: 0, behavior: 'smooth' });
 
@@ -83,23 +95,43 @@ function setActiveRoute(route) {
   triggerAdSensePush();
 }
 
-// Mobile Left Sidebar Drawer Controls
-function openMobileSidebar() {
-  state.isMobileSidebarOpen = true;
-  const drawer = document.getElementById('mobile-sidebar');
-  const backdrop = document.getElementById('mobile-backdrop');
-  if (drawer) drawer.classList.add('open');
-  if (backdrop) backdrop.classList.add('open');
-  document.body.style.overflow = 'hidden';
+// Persistent Sidebar Toggle, Open, and Close Handlers
+function toggleSidebar(forceState) {
+  const shouldOpen = typeof forceState === 'boolean' ? forceState : !state.isSidebarExpanded;
+  state.isSidebarExpanded = shouldOpen;
+
+  const sidebar = document.getElementById('persistent-sidebar');
+  const backdrop = document.getElementById('sidebar-backdrop');
+
+  if (sidebar) {
+    if (shouldOpen) {
+      sidebar.classList.add('expanded');
+    } else {
+      sidebar.classList.remove('expanded');
+    }
+  }
+
+  if (backdrop) {
+    if (shouldOpen) {
+      backdrop.classList.add('active');
+    } else {
+      backdrop.classList.remove('active');
+    }
+  }
+
+  if (shouldOpen) {
+    document.body.style.overflow = 'hidden';
+  } else {
+    document.body.style.overflow = '';
+  }
 }
 
-function closeMobileSidebar() {
-  state.isMobileSidebarOpen = false;
-  const drawer = document.getElementById('mobile-sidebar');
-  const backdrop = document.getElementById('mobile-backdrop');
-  if (drawer) drawer.classList.remove('open');
-  if (backdrop) backdrop.classList.remove('open');
-  document.body.style.overflow = '';
+function openSidebar() {
+  toggleSidebar(true);
+}
+
+function closeSidebar() {
+  toggleSidebar(false);
 }
 
 // Push AdSense slots safely
@@ -289,20 +321,51 @@ window.copyToClipboard = function (text, btnId) {
 document.addEventListener('DOMContentLoaded', () => {
   initRouter();
 
-  // Mobile Sidebar Hamburger & Close Triggers
+  // Sidebar Triggers & Close Controls
   const openSidebarBtn = document.getElementById('btn-open-sidebar');
+  const railToggleBtn = document.getElementById('btn-rail-toggle');
   const closeSidebarBtn = document.getElementById('btn-close-sidebar');
-  const backdrop = document.getElementById('mobile-backdrop');
+  const collapseFooterBtn = document.getElementById('btn-collapse-sidebar-footer');
+  const backdrop = document.getElementById('sidebar-backdrop');
 
   if (openSidebarBtn) {
-    openSidebarBtn.addEventListener('click', openMobileSidebar);
+    openSidebarBtn.addEventListener('click', () => toggleSidebar());
+  }
+  if (railToggleBtn) {
+    railToggleBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleSidebar();
+    });
   }
   if (closeSidebarBtn) {
-    closeSidebarBtn.addEventListener('click', closeMobileSidebar);
+    closeSidebarBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeSidebar();
+    });
+  }
+  if (collapseFooterBtn) {
+    collapseFooterBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeSidebar();
+    });
   }
   if (backdrop) {
-    backdrop.addEventListener('click', closeMobileSidebar);
+    backdrop.addEventListener('click', () => closeSidebar());
   }
+
+  // Keyboard Escape listener to exit sidebar
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeSidebar();
+    }
+  });
+
+  // Attach auto-close on all nav links
+  document.querySelectorAll('.nav-link, .rail-nav-item').forEach((elem) => {
+    elem.addEventListener('click', () => {
+      closeSidebar();
+    });
+  });
 
   // Create API Key Form Handler
   const createKeyForm = document.getElementById('create-api-key-form');

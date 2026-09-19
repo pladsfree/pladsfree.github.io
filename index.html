@@ -20,122 +20,205 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="/src/style.css" />
   </head>
-  <body class="min-h-full flex flex-col bg-slate-100 text-slate-900 antialiased font-sans pb-24">
+  <body class="min-h-full flex flex-col bg-slate-100 text-slate-900 antialiased font-sans pb-24 pl-[42px]">
 
-    <!-- MOBILE BACKDROP OVERLAY -->
-    <div id="mobile-backdrop" class="fixed inset-0 bg-slate-950/60 z-50 mobile-backdrop md:hidden backdrop-blur-xs"></div>
+    <!-- SIDEBAR BACKDROP OVERLAY (Closes sidebar on click from anywhere) -->
+    <div id="sidebar-backdrop" class="fixed inset-0 bg-slate-950/50 z-40 sidebar-backdrop backdrop-blur-xs cursor-pointer"></div>
 
-    <!-- MOBILE LEFT SIDEBAR DRAWER -->
-    <aside id="mobile-sidebar" class="fixed top-0 bottom-0 left-0 w-72 max-w-[85vw] bg-white z-50 mobile-sidebar-drawer shadow-2xl flex flex-col md:hidden border-r border-slate-200">
+    <!-- PERSISTENT SLIM SIDEBAR (Always there as 42px rail with logos, expands on access button click) -->
+    <aside id="persistent-sidebar" class="fixed top-0 bottom-0 left-0 z-50 bg-white border-r border-slate-200 persistent-sidebar overflow-hidden flex flex-col justify-between">
       
-      <!-- Sidebar Header -->
-      <div class="p-4 border-b border-slate-100 flex items-center justify-between">
-        <div class="flex items-center gap-2.5">
-          <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-sm">
-            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+      <!-- SLIM RAIL VIEW (Persistent 42px width with logos & icons) -->
+      <div id="sidebar-rail-view" class="rail-content w-[42px] h-full flex flex-col items-center justify-between py-3">
+        <!-- Top Icons -->
+        <div class="flex flex-col items-center gap-2">
+          <!-- App Logo Icon -->
+          <a href="#home" class="w-7 h-7 rounded-lg bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-xs hover:scale-105 transition-transform" title="plAds Home">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
               <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
               <line x1="8" y1="21" x2="16" y2="21"></line>
               <line x1="12" y1="17" x2="12" y2="21"></line>
             </svg>
+          </a>
+
+          <!-- Access / Expand Button -->
+          <button id="btn-rail-toggle" class="w-7 h-7 rounded-lg text-slate-600 hover:text-blue-600 hover:bg-slate-100 flex items-center justify-center transition-colors cursor-pointer" title="Expand Sidebar" aria-label="Expand sidebar">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
+
+          <div class="w-5 h-[1px] bg-slate-200 my-1"></div>
+
+          <!-- Vertical Route Icons -->
+          <div class="flex flex-col items-center gap-1.5">
+            <a href="#home" data-route="home" class="rail-nav-item nav-link w-7 h-7 rounded-lg text-slate-600 hover:text-blue-600 hover:bg-slate-100 flex items-center justify-center transition-colors" title="plAds/home">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+              </svg>
+            </a>
+
+            <a href="#img" data-route="img" class="rail-nav-item nav-link w-7 h-7 rounded-lg text-slate-600 hover:text-emerald-600 hover:bg-slate-100 flex items-center justify-center transition-colors" title="plAds/img">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                <polyline points="21 15 16 10 5 21"></polyline>
+              </svg>
+            </a>
+
+            <a href="#vid" data-route="vid" class="rail-nav-item nav-link w-7 h-7 rounded-lg text-slate-600 hover:text-indigo-600 hover:bg-slate-100 flex items-center justify-center transition-colors" title="plAds/vid">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <polygon points="23 7 16 12 23 17 23 7"></polygon>
+                <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+              </svg>
+            </a>
+
+            <a href="#api" data-route="api" class="rail-nav-item nav-link w-7 h-7 rounded-lg text-slate-600 hover:text-amber-600 hover:bg-slate-100 flex items-center justify-center transition-colors" title="/enter/api (Key Portal)">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path>
+              </svg>
+            </a>
           </div>
-          <div>
-            <div class="flex items-center gap-1.5">
-              <span class="text-xl font-black tracking-tight text-slate-900">pl<span class="text-blue-600">Ads</span></span>
-              <span class="text-[9px] font-bold px-1 py-0.5 rounded bg-emerald-100 text-emerald-800">REAL ADS</span>
+        </div>
+
+        <!-- Bottom Icons -->
+        <div class="flex flex-col items-center gap-2">
+          <a href="/api" target="_blank" class="w-7 h-7 rounded-lg text-slate-500 hover:text-blue-600 hover:bg-slate-100 flex items-center justify-center text-[9px] font-mono font-bold transition-colors" title="/api Directory">
+            API
+          </a>
+          <a href="/ads.txt" target="_blank" class="w-2.5 h-2.5 rounded-full bg-emerald-500 hover:scale-125 transition-transform" title="ads.txt Verified"></a>
+        </div>
+      </div>
+
+      <!-- EXPANDED DRAWER VIEW (Opens on Access Button click with full menu & exit button) -->
+      <div id="sidebar-expanded-view" class="expanded-content w-72 h-full flex flex-col justify-between p-4 overflow-y-auto bg-white">
+        
+        <!-- Header with Exit Button -->
+        <div class="space-y-4">
+          <div class="p-2 border-b border-slate-100 flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-sm">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                  <line x1="8" y1="21" x2="16" y2="21"></line>
+                  <line x1="12" y1="17" x2="12" y2="21"></line>
+                </svg>
+              </div>
+              <div>
+                <div class="flex items-center gap-1.5">
+                  <span class="text-xl font-black tracking-tight text-slate-900">pl<span class="text-blue-600">Ads</span></span>
+                  <span class="text-[9px] font-bold px-1 py-0.5 rounded bg-emerald-100 text-emerald-800">REAL ADS</span>
+                </div>
+                <p class="text-[10px] text-slate-500 font-medium">Free Ad Hosting</p>
+              </div>
             </div>
-            <p class="text-[10px] text-slate-500 font-medium">Free Ad Hosting</p>
+
+            <!-- Explicit Exit Button with X SVG -->
+            <button id="btn-close-sidebar" class="p-2 rounded-xl text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors cursor-pointer border border-slate-200 shadow-xs" title="Exit / Close Sidebar" aria-label="Exit sidebar">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Nav Items -->
+          <div class="space-y-1.5">
+            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-3 mb-2">Navigation</div>
+
+            <a href="#home" data-route="home" class="nav-link w-full px-3.5 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-3 transition-colors text-slate-700 hover:bg-slate-100">
+              <svg class="w-4 h-4 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+              </svg>
+              <span>plAds/home</span>
+            </a>
+
+            <a href="#img" data-route="img" class="nav-link w-full px-3.5 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-3 transition-colors text-slate-700 hover:bg-slate-100">
+              <svg class="w-4 h-4 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                <polyline points="21 15 16 10 5 21"></polyline>
+              </svg>
+              <span>plAds/img</span>
+            </a>
+
+            <a href="#vid" data-route="vid" class="nav-link w-full px-3.5 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-3 transition-colors text-slate-700 hover:bg-slate-100">
+              <svg class="w-4 h-4 text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <polygon points="23 7 16 12 23 17 23 7"></polygon>
+                <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+              </svg>
+              <span>plAds/vid</span>
+            </a>
+
+            <a href="#api" data-route="api" class="nav-link w-full px-3.5 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-3 transition-colors text-slate-700 hover:bg-slate-100">
+              <svg class="w-4 h-4 text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path>
+              </svg>
+              <span>/enter/api (Key Hub)</span>
+            </a>
+
+            <!-- Subpaths Quick Links -->
+            <div class="mt-4 pt-3 border-t border-slate-100 space-y-1">
+              <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-3 mb-1">Direct Subpaths</div>
+              <a href="/api" target="_blank" class="block px-3 py-1.5 text-[11px] text-blue-600 hover:underline font-mono">/api (Endpoints Directory)</a>
+              <a href="/api/img" target="_blank" class="block px-3 py-1.5 text-[11px] text-blue-600 hover:underline font-mono">/api/img (Blank White Image)</a>
+              <a href="/api/vid" target="_blank" class="block px-3 py-1.5 text-[11px] text-indigo-600 hover:underline font-mono">/api/vid (Blank White Video)</a>
+            </div>
           </div>
         </div>
 
-        <button id="btn-close-sidebar" class="p-2 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer" aria-label="Close sidebar">
-          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
-          </svg>
-        </button>
-      </div>
+        <!-- Sidebar Footer with Collapse Button -->
+        <div class="pt-4 border-t border-slate-100 space-y-3">
+          <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200/80 space-y-1">
+            <div class="text-[10px] font-mono text-slate-500 truncate">
+              ca-pub-3659618950683210
+            </div>
+            <div class="flex items-center gap-1 text-[10px] text-emerald-600 font-bold">
+              <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <span>ads.txt Verified Live</span>
+            </div>
+          </div>
 
-      <!-- Sidebar Nav Links -->
-      <div class="flex-1 overflow-y-auto p-4 space-y-1.5">
-        <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-3 mb-2">Navigation</div>
-
-        <a href="#home" data-route="home" class="nav-link w-full px-3.5 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-3 transition-colors text-slate-700 hover:bg-slate-100">
-          <svg class="w-4 h-4 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-            <polyline points="9 22 9 12 15 12 15 22"></polyline>
-          </svg>
-          <span>plAds/home</span>
-        </a>
-
-        <a href="#img" data-route="img" class="nav-link w-full px-3.5 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-3 transition-colors text-slate-700 hover:bg-slate-100">
-          <svg class="w-4 h-4 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-            <circle cx="8.5" cy="8.5" r="1.5"></circle>
-            <polyline points="21 15 16 10 5 21"></polyline>
-          </svg>
-          <span>plAds/img</span>
-        </a>
-
-        <a href="#vid" data-route="vid" class="nav-link w-full px-3.5 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-3 transition-colors text-slate-700 hover:bg-slate-100">
-          <svg class="w-4 h-4 text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-            <polygon points="23 7 16 12 23 17 23 7"></polygon>
-            <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
-          </svg>
-          <span>plAds/vid</span>
-        </a>
-
-        <a href="#api" data-route="api" class="nav-link w-full px-3.5 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-3 transition-colors text-slate-700 hover:bg-slate-100">
-          <svg class="w-4 h-4 text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-            <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path>
-          </svg>
-          <span>/enter/api (Key Hub)</span>
-        </a>
-
-        <!-- Subpaths Quick Links -->
-        <div class="mt-4 pt-3 border-t border-slate-100 space-y-1">
-          <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-3 mb-1">Direct Subpaths</div>
-          <a href="/api" target="_blank" class="block px-3 py-1.5 text-[11px] text-blue-600 hover:underline font-mono">/api (Endpoints Directory)</a>
-          <a href="/api/img" target="_blank" class="block px-3 py-1.5 text-[11px] text-blue-600 hover:underline font-mono">/api/img (Blank White Image)</a>
-          <a href="/api/vid" target="_blank" class="block px-3 py-1.5 text-[11px] text-indigo-600 hover:underline font-mono">/api/vid (Blank White Video)</a>
+          <!-- Bottom Collapse Action Button -->
+          <button id="btn-collapse-sidebar-footer" class="w-full py-2 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer border border-slate-200">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+            <span>Exit / Collapse Sidebar</span>
+          </button>
         </div>
-      </div>
 
-      <!-- Sidebar Footer -->
-      <div class="p-4 border-t border-slate-100 bg-slate-50 space-y-2">
-        <div class="text-[10px] font-mono text-slate-500 truncate">
-          ca-pub-3659618950683210
-        </div>
-        <div class="flex items-center gap-1 text-[10px] text-emerald-600 font-bold">
-          <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <polyline points="20 6 9 17 4 12"></polyline>
-          </svg>
-          <span>ads.txt Verified Live</span>
-        </div>
       </div>
     </aside>
 
     <!-- TOP AD TICKER & ADSENSE STATUS -->
-    <div id="top-ad-ticker" class="bg-gradient-to-r from-blue-700 via-indigo-700 to-slate-900 text-white text-xs py-2 px-4 shadow-sm overflow-hidden flex items-center justify-between border-b border-blue-800">
-      <div class="flex items-center gap-2 flex-shrink-0 z-10 pr-3">
-        <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-400 text-slate-950 uppercase tracking-wider">
-          <svg class="w-3 h-3 mr-1 inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-          </svg>
-          Real Google AdSense
-        </span>
-        <span class="font-semibold text-blue-100 hidden sm:inline">Publisher: ca-pub-3659618950683210</span>
-      </div>
+    <div id="top-ad-ticker" class="bg-gradient-to-r from-blue-700 via-indigo-700 to-slate-900 text-white text-xs py-2 shadow-sm border-b border-blue-800">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex items-center justify-between">
+        <div class="flex items-center gap-2 flex-shrink-0 z-10 pr-3">
+          <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-400 text-slate-950 uppercase tracking-wider">
+            <svg class="w-3 h-3 mr-1 inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+            Real Google AdSense
+          </span>
+          <span class="font-semibold text-blue-100 hidden sm:inline">Publisher: ca-pub-3659618950683210</span>
+        </div>
 
-      <div class="flex items-center gap-4 flex-shrink-0 text-[11px] text-blue-200">
-        <a href="/api" target="_blank" class="hover:underline font-mono text-amber-300">
-          /api Directory
-        </a>
-        <a href="/ads.txt" target="_blank" class="hover:underline flex items-center gap-1 font-mono">
-          <svg class="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <polyline points="20 6 9 17 4 12"></polyline>
-          </svg>
-          ads.txt
-        </a>
+        <div class="flex items-center gap-4 flex-shrink-0 text-[11px] text-blue-200">
+          <a href="/api" target="_blank" class="hover:underline font-mono text-amber-300">
+            /api Directory
+          </a>
+          <a href="/ads.txt" target="_blank" class="hover:underline flex items-center gap-1 font-mono">
+            <svg class="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            ads.txt
+          </a>
+        </div>
       </div>
     </div>
 
@@ -772,8 +855,33 @@
 
     </main>
 
-    <!-- STICKY REAL ADSENSE BOTTOM BANNER -->
-    <div id="floating-bottom-ad-banner" class="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 text-slate-900 px-4 py-2 shadow-2xl">
+    <!-- FOOTER -->
+    <footer id="main-footer" class="bg-white border-t border-slate-200 mt-12 py-8 text-slate-600 text-xs">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div class="flex items-center gap-2">
+            <span class="font-bold text-slate-900 text-sm">plAds</span>
+            <span class="text-slate-400">|</span>
+            <span>Real Google AdSense &amp; AdMob Hosting Network</span>
+          </div>
+          <div class="flex items-center gap-4 text-xs font-medium">
+            <a href="#home" class="hover:text-blue-600 transition-colors">plAds/home</a>
+            <a href="#img" class="hover:text-blue-600 transition-colors">plAds/img</a>
+            <a href="#vid" class="hover:text-blue-600 transition-colors">plAds/vid</a>
+            <a href="#api" class="hover:text-blue-600 transition-colors">/enter/api</a>
+            <a href="/api" target="_blank" class="hover:text-blue-600 font-mono transition-colors">/api</a>
+            <a href="/ads.txt" target="_blank" class="hover:text-blue-600 font-mono transition-colors">ads.txt</a>
+          </div>
+        </div>
+        <div class="text-center sm:text-left text-slate-400 text-[11px] pt-2 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-2">
+          <span>Google AdSense Publisher: ca-pub-3659618950683210</span>
+          <span>Endpoints: /api/img, /api/vid, /api/:apiKey/img, /api/:apiKey/vid</span>
+        </div>
+      </div>
+    </footer>
+
+    <!-- STICKY REAL ADSENSE BOTTOM BANNER (Offset matched with 42px rail) -->
+    <div id="floating-bottom-ad-banner" class="fixed bottom-0 left-[42px] right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 text-slate-900 px-4 py-2 shadow-2xl">
       <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
         
         <div class="flex items-center gap-3">
@@ -801,31 +909,6 @@
 
       </div>
     </div>
-
-    <!-- FOOTER -->
-    <footer id="main-footer" class="bg-white border-t border-slate-200 mt-12 py-8 text-slate-600 text-xs">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
-        <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div class="flex items-center gap-2">
-            <span class="font-bold text-slate-900 text-sm">plAds</span>
-            <span class="text-slate-400">|</span>
-            <span>Real Google AdSense &amp; AdMob Hosting Network</span>
-          </div>
-          <div class="flex items-center gap-4 text-xs font-medium">
-            <a href="#home" class="hover:text-blue-600 transition-colors">plAds/home</a>
-            <a href="#img" class="hover:text-blue-600 transition-colors">plAds/img</a>
-            <a href="#vid" class="hover:text-blue-600 transition-colors">plAds/vid</a>
-            <a href="#api" class="hover:text-blue-600 transition-colors">/enter/api</a>
-            <a href="/api" target="_blank" class="hover:text-blue-600 font-mono transition-colors">/api</a>
-            <a href="/ads.txt" target="_blank" class="hover:text-blue-600 font-mono transition-colors">ads.txt</a>
-          </div>
-        </div>
-        <div class="text-center sm:text-left text-slate-400 text-[11px] pt-2 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <span>Google AdSense Publisher: ca-pub-3659618950683210</span>
-          <span>Endpoints: /api/img, /api/vid, /api/:apiKey/img, /api/:apiKey/vid</span>
-        </div>
-      </div>
-    </footer>
 
     <script src="/src/app.js"></script>
   </body>

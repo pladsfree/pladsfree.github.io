@@ -24,6 +24,51 @@ body {
   line-height: 1.5;
 }
 
+/* Persistent Slim Sidebar Rail & Expandable Drawer */
+.persistent-sidebar {
+  width: 42px;
+  transition: width 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s ease;
+  will-change: width, box-shadow;
+}
+
+.persistent-sidebar.expanded {
+  width: 18rem; /* 288px / w-72 */
+  box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25), 0 0 0 1px rgba(15, 23, 42, 0.05);
+}
+
+/* Visibility toggling for slim rail vs full expanded content */
+.rail-content {
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+.expanded-content {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.persistent-sidebar.expanded .rail-content {
+  display: none;
+}
+
+.persistent-sidebar.expanded .expanded-content {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Backdrop Overlay */
+.sidebar-backdrop {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.sidebar-backdrop.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
 /* Custom Ad Slot Container with Fallback Support */
 .ad-slot-frame {
   position: relative;
@@ -51,76 +96,6 @@ body {
   padding: 2px 8px;
   border-radius: 4px;
   border: 1px solid #cbd5e1;
-}
-
-/* AdSense Live Slot Styling with Built-in Visual Layer */
-.adsense-slot-container {
-  position: relative;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  border-radius: 12px;
-}
-
-.adsense-slot-container ins.adsbygoogle {
-  position: relative;
-  z-index: 2;
-  width: 100%;
-  min-height: 80px;
-  display: block;
-}
-
-/* Visual placeholder shown if AdSense inventory has not loaded / unfulfilled */
-.adsense-placeholder-layer {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-  text-align: center;
-  border-radius: 10px;
-}
-
-/* Mobile Sidebar Drawer */
-.mobile-sidebar-drawer {
-  transform: translateX(-100%);
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.mobile-sidebar-drawer.open {
-  transform: translateX(0);
-}
-
-.mobile-backdrop {
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-}
-
-.mobile-backdrop.open {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-/* Ticker Animation */
-@keyframes ticker {
-  0% { transform: translate3d(0, 0, 0); }
-  100% { transform: translate3d(-50%, 0, 0); }
-}
-
-.ticker-track {
-  display: inline-flex;
-  white-space: nowrap;
-  animation: ticker 30s linear infinite;
-}
-
-.ticker-track:hover {
-  animation-play-state: paused;
 }
 
 /* Scrollbars */
