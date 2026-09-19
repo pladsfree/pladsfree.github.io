@@ -1,88 +1,40 @@
 /**
- * plAds - Static Application Engine (Vanilla JS)
- * Free Ad Hosting & Showcase Network
+ * plAds - Front-End Application Controller
+ * Handles Navigation, Real AdSense Loading, API Key Management, and Embed Testing
  */
 
-// State
 const state = {
-  activeRoute: 'home', // 'home' | 'img' | 'vid'
-  imgFilter: 'all',
-  videoAd: {
-    isPlaying: false,
-    currentTime: 0,
-    duration: 15,
-    isMuted: false,
-    canSkip: false,
-    skipTimer: 5,
-    hasSkipped: false,
-    currentAdIndex: 0,
-    isFullscreen: false,
-  },
-  rewardedAd: {
-    isPlaying: false,
-    timeLeft: 10,
-    isUnlocked: false,
-  },
-  customAd: {
-    headline: 'Lightning Fast Cloud Hosting',
-    tagline: 'Deploy static sites in seconds with 99.99% uptime SLA guarantee.',
-    cta: 'Start Free Trial',
-    theme: 'blue',
-    format: '728x90',
-  },
+  activeRoute: 'home', // 'home' | 'img' | 'vid' | 'api'
+  apiKeys: [],
+  domainStats: [],
 };
 
-// Video Ad campaigns
-const videoCampaigns = [
-  {
-    title: 'HyperCloud NextGen Infrastructure',
-    tagline: 'Scale effortlessly across 45 global edge regions with zero latency.',
-    cta: 'Claim $300 Credits',
-    accentColor: '#3b82f6',
-    secondaryColor: '#1e40af',
-    duration: 15,
-  },
-  {
-    title: 'CyberShield Quantum VPN',
-    tagline: 'Military-grade encryption protecting your privacy and security everywhere.',
-    cta: 'Get 80% Off Today',
-    accentColor: '#10b981',
-    secondaryColor: '#047857',
-    duration: 12,
-  },
-  {
-    title: 'DevForge AI Studio Pro',
-    tagline: 'Supercharge your development workflow with instant static deployments.',
-    cta: 'Explore Features',
-    accentColor: '#8b5cf6',
-    secondaryColor: '#6d28d9',
-    duration: 18,
-  },
-];
-
-// Router initialization
+// Router initialization supporting #home, #img, #image, #vid, #video, #api, /enter/api
 function initRouter() {
-  function handleHash() {
+  function handleRoute() {
     const hash = window.location.hash.toLowerCase();
     const pathname = window.location.pathname.toLowerCase();
 
-    if (hash.includes('vid') || pathname.includes('/vid')) {
+    if (hash.includes('api') || hash.includes('enter') || pathname.includes('/enter/api')) {
+      setActiveRoute('api');
+    } else if (hash.includes('vid') || hash.includes('video') || pathname.includes('/vid')) {
       setActiveRoute('vid');
-    } else if (hash.includes('img') || pathname.includes('/img')) {
+    } else if (hash.includes('img') || hash.includes('image') || pathname.includes('/img')) {
       setActiveRoute('img');
     } else {
       setActiveRoute('home');
     }
   }
 
-  window.addEventListener('hashchange', handleHash);
-  handleHash();
+  window.addEventListener('hashchange', handleRoute);
+  window.addEventListener('popstate', handleRoute);
+  handleRoute();
 }
 
 function setActiveRoute(route) {
   state.activeRoute = route;
 
-  // Update nav buttons active style
+  // Update navbar links
   document.querySelectorAll('.nav-link').forEach((link) => {
     const target = link.getAttribute('data-route');
     if (target === route) {
@@ -94,443 +46,277 @@ function setActiveRoute(route) {
     }
   });
 
-  // Toggle views
+  // Toggle view containers
   const homeView = document.getElementById('view-home');
   const imgView = document.getElementById('view-img');
   const vidView = document.getElementById('view-vid');
+  const apiView = document.getElementById('view-api');
 
   if (homeView) homeView.style.display = route === 'home' ? 'block' : 'none';
   if (imgView) imgView.style.display = route === 'img' ? 'block' : 'none';
   if (vidView) vidView.style.display = route === 'vid' ? 'block' : 'none';
+  if (apiView) apiView.style.display = route === 'api' ? 'block' : 'none';
 
-  // Scroll to top
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-
-  // Update current page indicator in title/subtext
-  const routeNameElem = document.getElementById('current-route-name');
-  if (routeNameElem) {
-    if (route === 'home') routeNameElem.textContent = 'plAds/home';
-    if (route === 'img') routeNameElem.textContent = 'plAds/img';
-    if (route === 'vid') routeNameElem.textContent = 'plAds/vid';
+  // Update current route badge in sub-header
+  const routeBadge = document.getElementById('current-route-name');
+  if (routeBadge) {
+    if (route === 'home') routeBadge.textContent = 'plAds/home';
+    if (route === 'img') routeBadge.textContent = 'plAds/img (or /api/img)';
+    if (route === 'vid') routeBadge.textContent = 'plAds/vid (or /api/vid)';
+    if (route === 'api') routeBadge.textContent = '/enter/api (API Key Hub)';
   }
 
-  // Trigger AdSense push safely
-  tryPushAdSense();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Load API keys if on API view
+  if (route === 'api') {
+    fetchApiKeys();
+    fetchStats();
+  }
+
+  // Push real AdSense units safely
+  triggerAdSensePush();
 }
 
-// Push AdSense slots safely without breaking if adblock or sandbox prevents it
-function tryPushAdSense() {
+// Push AdSense slots safely without crashing on adblock or sandboxing
+function triggerAdSensePush() {
   try {
     if (window.adsbygoogle && Array.isArray(window.adsbygoogle)) {
       document.querySelectorAll('.adsbygoogle:not([data-adsbygoogle-status])').forEach(() => {
         try {
           (window.adsbygoogle = window.adsbygoogle || []).push({});
         } catch (e) {
-          // Ignore duplicate push errors
+          // ignore duplicate push
         }
       });
     }
   } catch (err) {
-    // Silent fail for adblock or sandbox
+    // silent fallback
   }
 }
 
-// Initialize Video Ad Player Canvas
-let videoCanvasInterval = null;
-function initVideoPlayer() {
-  const canvas = document.getElementById('video-canvas');
-  if (!canvas) return;
-
-  const ctx = canvas.getContext('2d');
-  let frame = 0;
-
-  function drawVideoFrame() {
-    if (!ctx) return;
-    const width = canvas.width;
-    const height = canvas.height;
-    const campaign = videoCampaigns[state.videoAd.currentAdIndex];
-
-    // Background gradient
-    const grad = ctx.createLinearGradient(0, 0, width, height);
-    grad.addColorStop(0, campaign.secondaryColor);
-    grad.addColorStop(1, campaign.accentColor);
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, width, height);
-
-    // Animated geometric particles
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
-    for (let i = 0; i < 6; i++) {
-      const x = (Math.sin(frame * 0.02 + i) * 0.5 + 0.5) * width;
-      const y = (Math.cos(frame * 0.015 + i * 1.5) * 0.5 + 0.5) * height;
-      const radius = 40 + Math.sin(frame * 0.03 + i) * 20;
-      ctx.beginPath();
-      ctx.arc(x, y, radius, 0, Math.PI * 2);
-      ctx.fill();
+// API Key Management Functions
+async function fetchApiKeys() {
+  try {
+    const res = await fetch('/api/keys');
+    if (!res.ok) return;
+    const data = await res.json();
+    if (data.success && data.keys) {
+      state.apiKeys = data.keys;
+      renderApiKeysList();
     }
+  } catch (err) {
+    console.error('Failed to fetch API keys:', err);
+  }
+}
 
-    // Grid lines
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
-    ctx.lineWidth = 1;
-    for (let x = 0; x < width; x += 40) {
-      ctx.beginPath();
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x, height);
-      ctx.stroke();
+async function fetchStats() {
+  try {
+    const res = await fetch('/api/stats');
+    if (!res.ok) return;
+    const data = await res.json();
+    if (data.success && data.domains) {
+      state.domainStats = data.domains;
+      renderDomainStats();
     }
-    for (let y = 0; y < height; y += 40) {
-      ctx.beginPath();
-      ctx.moveTo(0, y);
-      ctx.lineTo(width, y);
-      ctx.stroke();
-    }
+  } catch (err) {
+    console.error('Failed to fetch domain stats:', err);
+  }
+}
 
-    // Center Ad Content
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
+function renderApiKeysList() {
+  const container = document.getElementById('api-keys-list-container');
+  if (!container) return;
 
-    // Badge
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
-    ctx.beginPath();
-    ctx.roundRect(width / 2 - 80, height / 2 - 90, 160, 26, 6);
-    ctx.fill();
-    ctx.fillStyle = '#fde047';
-    ctx.font = 'bold 12px system-ui, sans-serif';
-    ctx.fillText('SPONSORED VIDEO AD', width / 2, height / 2 - 77);
-
-    // Headline
-    ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 24px system-ui, sans-serif';
-    ctx.fillText(campaign.title, width / 2, height / 2 - 35);
-
-    // Tagline
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-    ctx.font = '14px system-ui, sans-serif';
-    ctx.fillText(campaign.tagline, width / 2, height / 2 + 5);
-
-    // CTA Button simulation on video
-    ctx.fillStyle = '#ffffff';
-    ctx.beginPath();
-    ctx.roundRect(width / 2 - 100, height / 2 + 45, 200, 42, 8);
-    ctx.fill();
-
-    ctx.fillStyle = campaign.secondaryColor;
-    ctx.font = 'bold 15px system-ui, sans-serif';
-    ctx.fillText(campaign.cta + ' →', width / 2, height / 2 + 66);
-
-    if (state.videoAd.isPlaying) {
-      frame++;
-    }
+  if (state.apiKeys.length === 0) {
+    container.innerHTML = `
+      <div class="text-center py-8 text-slate-400 text-xs border border-dashed border-slate-200 rounded-xl">
+        No API keys created yet. Generate one above to get 60 requests per 12 hours (120 req/day).
+      </div>
+    `;
+    return;
   }
 
-  // Animation Loop
-  function startRenderLoop() {
-    if (videoCanvasInterval) clearInterval(videoCanvasInterval);
-    videoCanvasInterval = setInterval(drawVideoFrame, 1000 / 30);
+  const origin = window.location.origin;
+
+  container.innerHTML = state.apiKeys
+    .map((item) => {
+      const imgEmbed = `<iframe src="${origin}/api/${item.key}/img" width="100%" height="250" frameborder="0" scrolling="no"></iframe>`;
+      const vidEmbed = `<iframe src="${origin}/api/${item.key}/vid" width="100%" height="360" frameborder="0" scrolling="no"></iframe>`;
+
+      return `
+      <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="font-bold text-slate-900 text-sm">${escapeHtml(item.name)}</span>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-100 text-blue-700">Free Tier (60 / 12h)</span>
+            </div>
+            <div class="text-xs font-mono text-slate-500 mt-1 flex items-center gap-2">
+              <span>Key: <strong>${item.key}</strong></span>
+              <button onclick="copyToClipboard('${item.key}', 'btn-copy-k-${item.key}')" id="btn-copy-k-${item.key}" class="p-1 hover:text-blue-600 cursor-pointer">
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="text-right">
+            <div class="text-xs font-bold text-slate-700">${item.current12hRequests} / 60 reqs (12h window)</div>
+            <div class="text-[11px] text-slate-400">${item.remaining12h} requests remaining</div>
+          </div>
+        </div>
+
+        <!-- Endpoints & Embed Codes -->
+        <div class="space-y-3 text-xs">
+          <!-- Image Ad Endpoint -->
+          <div class="space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="font-semibold text-slate-700">Image Ad Endpoint: <code class="text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded font-mono">/api/${item.key}/img</code></span>
+              <button onclick="copyToClipboard('${origin}/api/${item.key}/img', 'btn-img-url-${item.key}')" id="btn-img-url-${item.key}" class="text-[11px] text-blue-600 hover:underline flex items-center gap-1 cursor-pointer">
+                Copy URL
+              </button>
+            </div>
+            <div class="relative bg-slate-900 text-slate-200 p-2.5 rounded-lg font-mono text-[11px] overflow-x-auto flex items-center justify-between">
+              <code>${escapeHtml(imgEmbed)}</code>
+              <button onclick="copyToClipboard('${imgEmbed.replace(/'/g, "\\'")}', 'btn-img-emb-${item.key}')" id="btn-img-emb-${item.key}" class="ml-2 px-2 py-1 bg-slate-800 hover:bg-slate-700 text-white rounded text-[10px] whitespace-nowrap cursor-pointer">
+                Copy IFrame
+              </button>
+            </div>
+          </div>
+
+          <!-- Video Ad Endpoint -->
+          <div class="space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="font-semibold text-slate-700">Video Ad Endpoint: <code class="text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded font-mono">/api/${item.key}/vid</code></span>
+              <button onclick="copyToClipboard('${origin}/api/${item.key}/vid', 'btn-vid-url-${item.key}')" id="btn-vid-url-${item.key}" class="text-[11px] text-indigo-600 hover:underline flex items-center gap-1 cursor-pointer">
+                Copy URL
+              </button>
+            </div>
+            <div class="relative bg-slate-900 text-slate-200 p-2.5 rounded-lg font-mono text-[11px] overflow-x-auto flex items-center justify-between">
+              <code>${escapeHtml(vidEmbed)}</code>
+              <button onclick="copyToClipboard('${vidEmbed.replace(/'/g, "\\'")}', 'btn-vid-emb-${item.key}')" id="btn-vid-emb-${item.key}" class="ml-2 px-2 py-1 bg-slate-800 hover:bg-slate-700 text-white rounded text-[10px] whitespace-nowrap cursor-pointer">
+                Copy IFrame
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      `;
+    })
+    .join('');
+}
+
+function renderDomainStats() {
+  const container = document.getElementById('domain-stats-container');
+  if (!container) return;
+
+  if (state.domainStats.length === 0) {
+    container.innerHTML = `<div class="text-slate-400 text-xs text-center py-4">No domain requests logged yet. Embed /api/img or /api/vid on any domain to start tracking.</div>`;
+    return;
   }
 
-  startRenderLoop();
+  container.innerHTML = state.domainStats
+    .map((d) => {
+      const pct = Math.min(100, (d.current24hRequests / 20) * 100);
+      return `
+      <div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-200 text-xs">
+        <div class="space-y-1">
+          <div class="font-bold text-slate-800 font-mono">${escapeHtml(d.domain)}</div>
+          <div class="text-[11px] text-slate-500">Lifetime Hits: ${d.totalLifetime}</div>
+        </div>
+        <div class="text-right space-y-1">
+          <div class="font-semibold ${d.current24hRequests >= 20 ? 'text-red-600' : 'text-slate-700'}">${d.current24hRequests} / 20 reqs (24h)</div>
+          <div class="w-24 bg-slate-200 h-1.5 rounded-full overflow-hidden">
+            <div class="h-full ${pct >= 100 ? 'bg-red-500' : 'bg-blue-600'}" style="width: ${pct}%"></div>
+          </div>
+        </div>
+      </div>
+      `;
+    })
+    .join('');
 }
 
-// Video ad timer loop
-let videoTimerInterval = null;
-function startVideoTimer() {
-  if (videoTimerInterval) clearInterval(videoTimerInterval);
-
-  videoTimerInterval = setInterval(() => {
-    if (!state.videoAd.isPlaying) return;
-
-    state.videoAd.currentTime += 0.5;
-
-    // Update skip timer
-    if (state.videoAd.skipTimer > 0) {
-      state.videoAd.skipTimer -= 0.5;
-      if (state.videoAd.skipTimer <= 0) {
-        state.videoAd.skipTimer = 0;
-        state.videoAd.canSkip = true;
-      }
-    }
-
-    // Check completion
-    const campaign = videoCampaigns[state.videoAd.currentAdIndex];
-    if (state.videoAd.currentTime >= campaign.duration) {
-      // Ad finished, switch to next ad
-      state.videoAd.currentAdIndex = (state.videoAd.currentAdIndex + 1) % videoCampaigns.length;
-      state.videoAd.currentTime = 0;
-      state.videoAd.skipTimer = 5;
-      state.videoAd.canSkip = false;
-    }
-
-    updateVideoUI();
-  }, 500);
+// Helpers
+function escapeHtml(str) {
+  return (str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
 }
 
-function updateVideoUI() {
-  const campaign = videoCampaigns[state.videoAd.currentAdIndex];
-  const duration = campaign.duration;
-  const progressPercent = (state.videoAd.currentTime / duration) * 100;
-
-  // Update progress bar
-  const progressBar = document.getElementById('video-progress-fill');
-  if (progressBar) progressBar.style.width = `${progressPercent}%`;
-
-  // Update time display
-  const timeDisplay = document.getElementById('video-time-display');
-  if (timeDisplay) {
-    const curSec = Math.floor(state.videoAd.currentTime);
-    timeDisplay.textContent = `0:${curSec < 10 ? '0' : ''}${curSec} / 0:${duration}`;
-  }
-
-  // Update skip button
-  const skipBtn = document.getElementById('video-skip-btn');
-  const skipCount = document.getElementById('video-skip-countdown');
-  if (skipBtn && skipCount) {
-    if (state.videoAd.canSkip) {
-      skipBtn.classList.remove('opacity-60', 'cursor-not-allowed');
-      skipBtn.classList.add('opacity-100', 'hover:bg-slate-900', 'cursor-pointer');
-      skipCount.textContent = 'Skip Ad';
-    } else {
-      skipBtn.classList.add('opacity-60', 'cursor-not-allowed');
-      skipBtn.classList.remove('opacity-100', 'hover:bg-slate-900', 'cursor-pointer');
-      skipCount.textContent = `Skip in ${Math.ceil(state.videoAd.skipTimer)}s`;
-    }
-  }
-
-  // Update companion card
-  const compTitle = document.getElementById('companion-ad-title');
-  const compTagline = document.getElementById('companion-ad-tagline');
-  const compCta = document.getElementById('companion-ad-cta');
-  if (compTitle) compTitle.textContent = campaign.title;
-  if (compTagline) compTagline.textContent = campaign.tagline;
-  if (compCta) compCta.textContent = campaign.cta;
-}
-
-// Rewarded Ad Timer
-let rewardedTimer = null;
-function toggleRewardedAd() {
-  const btn = document.getElementById('btn-watch-rewarded');
-  const statusElem = document.getElementById('rewarded-status');
-  const timerElem = document.getElementById('rewarded-timer-text');
-  const progressElem = document.getElementById('rewarded-progress');
-
-  if (state.rewardedAd.isPlaying) return;
-
-  state.rewardedAd.isPlaying = true;
-  state.rewardedAd.timeLeft = 8;
-  state.rewardedAd.isUnlocked = false;
-
-  if (btn) btn.disabled = true;
-  if (statusElem) statusElem.textContent = 'Ad is playing... Please do not close.';
-
-  if (rewardedTimer) clearInterval(rewardedTimer);
-  rewardedTimer = setInterval(() => {
-    state.rewardedAd.timeLeft -= 1;
-    if (timerElem) timerElem.textContent = `${state.rewardedAd.timeLeft}s remaining`;
-    if (progressElem) {
-      const pct = ((8 - state.rewardedAd.timeLeft) / 8) * 100;
-      progressElem.style.width = `${pct}%`;
-    }
-
-    if (state.rewardedAd.timeLeft <= 0) {
-      clearInterval(rewardedTimer);
-      state.rewardedAd.isPlaying = false;
-      state.rewardedAd.isUnlocked = true;
-      if (btn) btn.disabled = false;
-      if (statusElem) statusElem.textContent = 'Reward Unlocked! 100 Free Ad Hosting Credits Added.';
-      if (timerElem) timerElem.textContent = 'Complete!';
-
-      // Highlight rewarded badge
-      const badge = document.getElementById('reward-badge-unlocked');
-      if (badge) badge.classList.remove('hidden');
-    }
-  }, 1000);
-}
-
-// Image Ad Filtering
-function initImageFilters() {
-  const buttons = document.querySelectorAll('.img-filter-btn');
-  const adCards = document.querySelectorAll('.image-ad-card');
-
-  buttons.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const filter = btn.getAttribute('data-filter');
-      buttons.forEach((b) => {
-        b.classList.remove('bg-blue-600', 'text-white');
-        b.classList.add('bg-white', 'text-slate-700', 'border-slate-200');
-      });
-      btn.classList.add('bg-blue-600', 'text-white');
-      btn.classList.remove('bg-white', 'text-slate-700');
-
-      adCards.forEach((card) => {
-        const format = card.getAttribute('data-format');
-        if (filter === 'all' || format === filter) {
-          card.style.display = 'block';
-        } else {
-          card.style.display = 'none';
-        }
-      });
-    });
-  });
-}
-
-// Custom Ad Creator
-function initCustomAdCreator() {
-  const headlineInput = document.getElementById('custom-ad-headline');
-  const taglineInput = document.getElementById('custom-ad-tagline');
-  const ctaInput = document.getElementById('custom-ad-cta');
-  const themeSelect = document.getElementById('custom-ad-theme');
-  const formatSelect = document.getElementById('custom-ad-format');
-
-  const previewBox = document.getElementById('custom-ad-preview-box');
-  const previewHeadline = document.getElementById('custom-ad-preview-headline');
-  const previewTagline = document.getElementById('custom-ad-preview-tagline');
-  const previewCta = document.getElementById('custom-ad-preview-cta');
-
-  function updatePreview() {
-    if (!previewBox) return;
-
-    const headline = headlineInput ? headlineInput.value : state.customAd.headline;
-    const tagline = taglineInput ? taglineInput.value : state.customAd.tagline;
-    const cta = ctaInput ? ctaInput.value : state.customAd.cta;
-    const theme = themeSelect ? themeSelect.value : state.customAd.theme;
-    const format = formatSelect ? formatSelect.value : state.customAd.format;
-
-    if (previewHeadline) previewHeadline.textContent = headline || 'Your Ad Headline Here';
-    if (previewTagline) previewTagline.textContent = tagline || 'Engaging description showcasing your product or services.';
-    if (previewCta) previewCta.textContent = cta || 'Learn More';
-
-    // Change themes
-    previewBox.className = 'relative rounded-lg p-6 text-white shadow-md transition-all flex flex-col justify-between overflow-hidden ';
-    if (theme === 'blue') {
-      previewBox.classList.add('bg-gradient-to-r', 'from-blue-600', 'to-indigo-800');
-    } else if (theme === 'emerald') {
-      previewBox.classList.add('bg-gradient-to-r', 'from-emerald-600', 'to-teal-800');
-    } else if (theme === 'purple') {
-      previewBox.classList.add('bg-gradient-to-r', 'from-purple-600', 'to-pink-700');
-    } else if (theme === 'amber') {
-      previewBox.classList.add('bg-gradient-to-r', 'from-amber-600', 'to-red-700');
-    } else {
-      previewBox.classList.add('bg-gradient-to-r', 'from-slate-800', 'to-slate-950');
-    }
-
-    // Change format dimensions
-    if (format === '728x90') {
-      previewBox.style.minHeight = '110px';
-    } else if (format === '300x250') {
-      previewBox.style.minHeight = '250px';
-    } else if (format === '336x280') {
-      previewBox.style.minHeight = '280px';
-    } else {
-      previewBox.style.minHeight = '140px';
-    }
-  }
-
-  [headlineInput, taglineInput, ctaInput, themeSelect, formatSelect].forEach((input) => {
-    if (input) {
-      input.addEventListener('input', updatePreview);
-      input.addEventListener('change', updatePreview);
-    }
-  });
-
-  updatePreview();
-}
-
-// Copy Code Helper with Visual Feedback
 window.copyToClipboard = function (text, btnId) {
   navigator.clipboard.writeText(text).then(() => {
     const btn = document.getElementById(btnId);
     if (btn) {
-      const originalHtml = btn.innerHTML;
-      btn.innerHTML = `
-        <svg class="w-4 h-4 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="20 6 9 17 4 12"></polyline>
-        </svg>
-        <span class="text-xs font-semibold text-emerald-600">Copied!</span>
-      `;
+      const orig = btn.innerHTML;
+      btn.innerHTML = `<span class="text-emerald-500 font-bold text-xs">Copied!</span>`;
       setTimeout(() => {
-        btn.innerHTML = originalHtml;
+        btn.innerHTML = orig;
       }, 2000);
     }
   }).catch(() => {
-    // Fallback prompt
-    prompt('Copy ad code:', text);
+    prompt('Copy code:', text);
   });
 };
 
-// Global App Initialization on DOM Ready
+// Global App Initialization
 document.addEventListener('DOMContentLoaded', () => {
   initRouter();
-  initVideoPlayer();
-  initImageFilters();
-  initCustomAdCreator();
 
-  // Play/Pause Video Ad
-  const playBtn = document.getElementById('video-play-btn');
-  if (playBtn) {
-    playBtn.addEventListener('click', () => {
-      state.videoAd.isPlaying = !state.videoAd.isPlaying;
-      const playIcon = document.getElementById('video-play-icon');
-      const pauseIcon = document.getElementById('video-pause-icon');
+  // Create API Key Form Handler
+  const createKeyForm = document.getElementById('create-api-key-form');
+  if (createKeyForm) {
+    createKeyForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const input = document.getElementById('api-key-name-input');
+      const name = input ? input.value.trim() : '';
 
-      if (state.videoAd.isPlaying) {
-        if (playIcon) playIcon.classList.add('hidden');
-        if (pauseIcon) pauseIcon.classList.remove('hidden');
-        startVideoTimer();
-      } else {
-        if (playIcon) playIcon.classList.remove('hidden');
-        if (pauseIcon) pauseIcon.classList.add('hidden');
+      if (!name) return;
+
+      try {
+        const res = await fetch('/api/keys', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name }),
+        });
+        const data = await res.json();
+        if (data.success) {
+          if (input) input.value = '';
+          fetchApiKeys();
+        }
+      } catch (err) {
+        console.error('Failed to create key:', err);
       }
     });
   }
 
-  // Skip Video Ad Button
-  const skipBtn = document.getElementById('video-skip-btn');
-  if (skipBtn) {
-    skipBtn.addEventListener('click', () => {
-      if (state.videoAd.canSkip) {
-        state.videoAd.currentAdIndex = (state.videoAd.currentAdIndex + 1) % videoCampaigns.length;
-        state.videoAd.currentTime = 0;
-        state.videoAd.skipTimer = 5;
-        state.videoAd.canSkip = false;
-        updateVideoUI();
+  // Live IFrame Sandbox Tester
+  const testForm = document.getElementById('iframe-test-form');
+  if (testForm) {
+    testForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const typeSelect = document.getElementById('test-ad-type');
+      const keySelect = document.getElementById('test-api-key');
+      const domainInput = document.getElementById('test-custom-domain');
+      const iframePreview = document.getElementById('test-live-iframe');
+
+      const type = typeSelect ? typeSelect.value : 'img';
+      const key = keySelect ? keySelect.value : '';
+      const domain = domainInput ? domainInput.value.trim() : '';
+
+      let targetUrl = key ? `/api/${key}/${type}` : `/api/${type}`;
+      if (domain) {
+        targetUrl += `?domain=${encodeURIComponent(domain)}`;
+      }
+
+      if (iframePreview) {
+        iframePreview.src = targetUrl;
       }
     });
   }
 
-  // Rewarded Ad Trigger
-  const rewardedBtn = document.getElementById('btn-watch-rewarded');
-  if (rewardedBtn) {
-    rewardedBtn.addEventListener('click', toggleRewardedAd);
-  }
-
-  // Dismiss Floating Bottom Ad Banner
-  const closeFloatingAdBtn = document.getElementById('btn-close-floating-ad');
-  if (closeFloatingAdBtn) {
-    closeFloatingAdBtn.addEventListener('click', () => {
-      const banner = document.getElementById('floating-bottom-ad-banner');
-      if (banner) banner.style.display = 'none';
-    });
-  }
-
-  // Refresh ads randomizer
-  const refreshAdsBtn = document.getElementById('btn-refresh-ads');
-  if (refreshAdsBtn) {
-    refreshAdsBtn.addEventListener('click', () => {
-      const badges = document.querySelectorAll('.ad-refresh-target');
-      badges.forEach((el) => {
-        el.classList.add('animate-pulse');
-        setTimeout(() => el.classList.remove('animate-pulse'), 600);
-      });
-      tryPushAdSense();
-    });
-  }
-
-  // Auto-play preview video ad automatically
-  setTimeout(() => {
-    state.videoAd.isPlaying = true;
-    const playIcon = document.getElementById('video-play-icon');
-    const pauseIcon = document.getElementById('video-pause-icon');
-    if (playIcon) playIcon.classList.add('hidden');
-    if (pauseIcon) pauseIcon.classList.remove('hidden');
-    startVideoTimer();
-  }, 800);
+  // Auto trigger AdSense
+  setTimeout(triggerAdSensePush, 500);
 });
