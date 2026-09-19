@@ -13,13 +13,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-  // Allow iframing by removing X-Frame-Options or setting to ALLOWALL
   res.removeHeader('X-Frame-Options');
   res.header('Content-Security-Policy', "frame-ancestors *;");
   next();
 });
 
-// Domain rate tracking (20 req / domain per rolling window)
+// Domain rate tracking (20 req / domain per 24 hours)
 interface RequestLog {
   count: number;
   timestamps: number[];
@@ -85,33 +84,31 @@ function extractDomain(req: Request): string {
   return ip.toString();
 }
 
-// Render clean blank white HTML with real Google AdSense ad unit
-function renderBlankWhiteAdHtml(type: 'image' | 'video', domainOrKey: string, remainingReqs: number): string {
+// Render clean blank white HTML with pure real Google AdSense ad unit ONLY (no fake ads, no mock text)
+function renderBlankWhiteAdHtml(type: 'image' | 'video', remainingReqs: number): string {
   const isVideo = type === 'video';
+  const slotId = isVideo ? '7890123456' : '1234567890';
 
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>plAds - Ad Stream</title>
+  <title>plAds - Real Google AdSense</title>
   <meta name="google-adsense-account" content="${ADSENSE_CLIENT}">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}" crossorigin="anonymous"></script>
   <style>
-    * { box-sizing: border-box; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body {
-      margin: 0;
-      padding: 0;
       width: 100%;
       height: 100%;
       background-color: #ffffff;
-      color: #000000;
+      margin: 0;
+      padding: 0;
       overflow: hidden;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      font-family: system-ui, -apple-system, sans-serif;
     }
     .ad-container {
       width: 100%;
@@ -120,25 +117,11 @@ function renderBlankWhiteAdHtml(type: 'image' | 'video', domainOrKey: string, re
       align-items: center;
       justify-content: center;
       background: #ffffff;
-      position: relative;
     }
     .adsbygoogle {
       display: block !important;
       width: 100% !important;
       height: 100% !important;
-      min-height: 90px;
-    }
-    .watermark {
-      position: absolute;
-      bottom: 2px;
-      right: 4px;
-      font-size: 9px;
-      color: #94a3b8;
-      background: rgba(255,255,255,0.8);
-      padding: 1px 4px;
-      border-radius: 2px;
-      pointer-events: none;
-      font-family: monospace;
     }
   </style>
 </head>
@@ -146,13 +129,14 @@ function renderBlankWhiteAdHtml(type: 'image' | 'video', domainOrKey: string, re
   <div class="ad-container">
     <ins class="adsbygoogle"
          data-ad-client="${ADSENSE_CLIENT}"
-         data-ad-slot="${isVideo ? '7890123456' : '1234567890'}"
+         data-ad-slot="${slotId}"
          data-ad-format="${isVideo ? 'video' : 'auto'}"
          data-full-width-responsive="true"></ins>
-    <div class="watermark">plAds • ${type} (${remainingReqs} left)</div>
   </div>
   <script>
-    (adsbygoogle = window.adsbygoogle || []).push({});
+    try {
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    } catch(e) {}
   </script>
 </body>
 </html>`;
@@ -191,6 +175,179 @@ function renderLimitExceededHtml(message: string): string {
 }
 
 // -------------------------------------------------------------
+// API DIRECTORY / INDEX SUBPATH (/api and /api/)
+// -------------------------------------------------------------
+app.get(['/api', '/api/'], (req, res) => {
+  const acceptsHtml = req.headers.accept && req.headers.accept.includes('text/html');
+  const host = req.headers.host || `localhost:${PORT}`;
+  const protocol = req.secure || req.headers['x-forwarded-proto'] === 'https' ? 'https' : 'http';
+  const baseUrl = `${protocol}://${host}`;
+
+  const endpoints = {
+    service: 'plAds API Subpaths & Endpoints Directory',
+    adsensePublisherId: ADSENSE_CLIENT,
+    endpoints: {
+      imageAd: {
+        path: '/api/img',
+        method: 'GET',
+        description: 'Returns blank white HTML with real Google AdSense Image ad (20 requests per domain per 24h limit)',
+        url: `${baseUrl}/api/img`,
+        iframeSnippet: `<iframe src="${baseUrl}/api/img" width="100%" height="250" frameborder="0" scrolling="no"></iframe>`
+      },
+      videoAd: {
+        path: '/api/vid',
+        method: 'GET',
+        description: 'Returns blank white HTML with real Google AdSense Video ad (20 requests per domain per 24h limit)',
+        url: `${baseUrl}/api/vid`,
+        iframeSnippet: `<iframe src="${baseUrl}/api/vid" width="100%" height="360" frameborder="0" scrolling="no"></iframe>`
+      },
+      apiKeyImageAd: {
+        path: '/api/:apiKey/img',
+        method: 'GET',
+        description: 'Returns blank white HTML with real Google AdSense Image ad with API Key (60 requests per 12 hours)',
+        exampleUrl: `${baseUrl}/api/demo_ad_key_123/img`,
+        iframeSnippet: `<iframe src="${baseUrl}/api/YOUR_API_KEY/img" width="100%" height="250" frameborder="0" scrolling="no"></iframe>`
+      },
+      apiKeyVideoAd: {
+        path: '/api/:apiKey/vid',
+        method: 'GET',
+        description: 'Returns blank white HTML with real Google AdSense Video ad with API Key (60 requests per 12 hours)',
+        exampleUrl: `${baseUrl}/api/demo_ad_key_123/vid`,
+        iframeSnippet: `<iframe src="${baseUrl}/api/YOUR_API_KEY/vid" width="100%" height="360" frameborder="0" scrolling="no"></iframe>`
+      },
+      createApiKey: {
+        path: '/api/keys',
+        method: 'POST',
+        description: 'Create a new free tier API key with name',
+        body: { name: 'My Website Name' }
+      },
+      listApiKeys: {
+        path: '/api/keys',
+        method: 'GET',
+        description: 'List all generated API keys with remaining quota'
+      },
+      stats: {
+        path: '/api/stats',
+        method: 'GET',
+        description: 'View active tracked domains, requests, and limits'
+      },
+      enterApiPortal: {
+        path: '/enter/api',
+        method: 'GET',
+        description: 'Web dashboard to create and manage API keys'
+      }
+    }
+  };
+
+  if (acceptsHtml && !req.query.json) {
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    return res.send(`<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>plAds - API Subpaths Directory</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="bg-slate-50 text-slate-900 p-6 md:p-12 font-sans antialiased">
+  <div class="max-w-4xl mx-auto space-y-6">
+    <div class="bg-white p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+      <div class="flex items-center gap-2">
+        <span class="px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-800 text-xs font-bold font-mono">/api</span>
+        <span class="text-xs text-slate-500 font-mono">ca-pub-3659618950683210</span>
+      </div>
+      <h1 class="text-2xl md:text-3xl font-black text-slate-900">plAds API Subpaths &amp; Endpoints</h1>
+      <p class="text-sm text-slate-600">All available HTTP subpaths for embedding pure Google AdSense ads and managing API keys.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- Image Ad Subpath -->
+      <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="font-mono text-sm font-bold text-blue-600">/api/img</span>
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-700">20 Req/Domain</span>
+        </div>
+        <p class="text-xs text-slate-600">Pure blank white HTML containing real Google AdSense image banner ad.</p>
+        <div class="flex items-center gap-2 pt-2 border-t border-slate-100">
+          <a href="/api/img" target="_blank" class="text-xs text-blue-600 hover:underline font-bold">Open Endpoint →</a>
+        </div>
+      </div>
+
+      <!-- Video Ad Subpath -->
+      <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="font-mono text-sm font-bold text-indigo-600">/api/vid</span>
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-700">20 Req/Domain</span>
+        </div>
+        <p class="text-xs text-slate-600">Pure blank white HTML containing real Google AdSense video ad unit.</p>
+        <div class="flex items-center gap-2 pt-2 border-t border-slate-100">
+          <a href="/api/vid" target="_blank" class="text-xs text-indigo-600 hover:underline font-bold">Open Endpoint →</a>
+        </div>
+      </div>
+
+      <!-- API Key Image Ad Subpath -->
+      <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="font-mono text-sm font-bold text-blue-600">/api/:apiKey/img</span>
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-100 text-blue-800">60 Req/12h</span>
+        </div>
+        <p class="text-xs text-slate-600">AdSense image ad stream authenticated with your API key.</p>
+        <div class="flex items-center gap-2 pt-2 border-t border-slate-100">
+          <a href="/api/demo_ad_key_123/img" target="_blank" class="text-xs text-blue-600 hover:underline font-bold">Demo Key Image →</a>
+        </div>
+      </div>
+
+      <!-- API Key Video Ad Subpath -->
+      <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="font-mono text-sm font-bold text-indigo-600">/api/:apiKey/vid</span>
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-100 text-indigo-800">60 Req/12h</span>
+        </div>
+        <p class="text-xs text-slate-600">AdSense video ad stream authenticated with your API key.</p>
+        <div class="flex items-center gap-2 pt-2 border-t border-slate-100">
+          <a href="/api/demo_ad_key_123/vid" target="_blank" class="text-xs text-indigo-600 hover:underline font-bold">Demo Key Video →</a>
+        </div>
+      </div>
+
+      <!-- API Keys Manager -->
+      <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="font-mono text-sm font-bold text-slate-900">/api/keys</span>
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">JSON</span>
+        </div>
+        <p class="text-xs text-slate-600">Create (POST) and list (GET) generated API keys.</p>
+        <div class="flex items-center gap-2 pt-2 border-t border-slate-100">
+          <a href="/api/keys" target="_blank" class="text-xs text-blue-600 hover:underline font-bold">View JSON →</a>
+        </div>
+      </div>
+
+      <!-- Stats Endpoint -->
+      <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="font-mono text-sm font-bold text-slate-900">/api/stats</span>
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">JSON</span>
+        </div>
+        <p class="text-xs text-slate-600">View tracked domain quotas and lifetime request hits.</p>
+        <div class="flex items-center gap-2 pt-2 border-t border-slate-100">
+          <a href="/api/stats" target="_blank" class="text-xs text-blue-600 hover:underline font-bold">View JSON →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center pt-4">
+      <a href="/" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition-all shadow">
+        ← Return to plAds Home
+      </a>
+    </div>
+  </div>
+</body>
+</html>`);
+  }
+
+  return res.json(endpoints);
+});
+
+// -------------------------------------------------------------
 // PUBLIC FREE ENDPOINTS (20 Requests per domain limit)
 // -------------------------------------------------------------
 
@@ -220,7 +377,7 @@ function handleDomainAdRequest(req: Request, res: Response, type: 'image' | 'vid
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   res.setHeader('X-plAds-Domain', domain);
   res.setHeader('X-plAds-Remaining', remaining.toString());
-  return res.send(renderBlankWhiteAdHtml(type, domain, remaining));
+  return res.send(renderBlankWhiteAdHtml(type, remaining));
 }
 
 // /api/img and /api/image
@@ -264,7 +421,7 @@ function handleApiKeyAdRequest(req: Request, res: Response, apiKey: string, type
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   res.setHeader('X-plAds-Key-Name', keyData.name);
   res.setHeader('X-plAds-Key-Remaining', remaining.toString());
-  return res.send(renderBlankWhiteAdHtml(type, keyData.name, remaining));
+  return res.send(renderBlankWhiteAdHtml(type, remaining));
 }
 
 // Format: /api/:apiKey/img

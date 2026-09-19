@@ -1,4 +1,4 @@
-/* plAds - Modern Static Stylesheet */
+/* plAds - Stylesheet & Responsive Layout */
 @import "tailwindcss";
 
 :root {
@@ -24,18 +24,18 @@ body {
   line-height: 1.5;
 }
 
-/* Custom Ad Styling */
+/* Custom Ad Slot Container with Fallback Support */
 .ad-slot-frame {
   position: relative;
   background: #ffffff;
   border: 1px solid var(--surface-border);
-  border-radius: 8px;
+  border-radius: 16px;
   overflow: hidden;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .ad-slot-frame:hover {
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
 }
 
 .ad-badge {
@@ -53,10 +53,58 @@ body {
   border: 1px solid #cbd5e1;
 }
 
-.ad-badge-sponsored {
-  background-color: #fef3c7;
-  color: #92400e;
-  border-color: #fde68a;
+/* AdSense Live Slot Styling with Built-in Visual Layer */
+.adsense-slot-container {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.adsense-slot-container ins.adsbygoogle {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  min-height: 80px;
+  display: block;
+}
+
+/* Visual placeholder shown if AdSense inventory has not loaded / unfulfilled */
+.adsense-placeholder-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  text-align: center;
+  border-radius: 10px;
+}
+
+/* Mobile Sidebar Drawer */
+.mobile-sidebar-drawer {
+  transform: translateX(-100%);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mobile-sidebar-drawer.open {
+  transform: translateX(0);
+}
+
+.mobile-backdrop {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.mobile-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 /* Ticker Animation */
@@ -75,25 +123,10 @@ body {
   animation-play-state: paused;
 }
 
-/* Pulse Glow */
-@keyframes pulse-subtle {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.6; }
-}
-
-.animate-pulse-subtle {
-  animation: pulse-subtle 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-/* Video Canvas Overlay */
-.video-ad-overlay {
-  background: linear-gradient(180deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 25%, rgba(0,0,0,0) 75%, rgba(0,0,0,0.85) 100%);
-}
-
-/* Interactive custom scrollbars */
+/* Scrollbars */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
   background: #f1f5f9;
@@ -101,7 +134,4 @@ body {
 ::-webkit-scrollbar-thumb {
   background: #cbd5e1;
   border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
 }

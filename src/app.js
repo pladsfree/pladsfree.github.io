@@ -1,12 +1,14 @@
 /**
  * plAds - Front-End Application Controller
- * Handles Navigation, Real AdSense Loading, API Key Management, and Embed Testing
+ * Handles Responsive Navigation (Desktop Navbar & Mobile Left Sidebar),
+ * API Key Management, and AdSense Slot Management
  */
 
 const state = {
   activeRoute: 'home', // 'home' | 'img' | 'vid' | 'api'
   apiKeys: [],
   domainStats: [],
+  isMobileSidebarOpen: false,
 };
 
 // Router initialization supporting #home, #img, #image, #vid, #video, #api, /enter/api
@@ -34,12 +36,12 @@ function initRouter() {
 function setActiveRoute(route) {
   state.activeRoute = route;
 
-  // Update navbar links
+  // Update navbar and sidebar links
   document.querySelectorAll('.nav-link').forEach((link) => {
     const target = link.getAttribute('data-route');
     if (target === route) {
       link.classList.add('bg-blue-600', 'text-white', 'shadow-sm');
-      link.classList.remove('text-slate-600', 'hover:bg-slate-100', 'hover:text-slate-900');
+      link.classList.remove('text-slate-600', 'text-slate-700', 'hover:bg-slate-100', 'hover:text-slate-900');
     } else {
       link.classList.remove('bg-blue-600', 'text-white', 'shadow-sm');
       link.classList.add('text-slate-600', 'hover:bg-slate-100', 'hover:text-slate-900');
@@ -60,11 +62,14 @@ function setActiveRoute(route) {
   // Update current route badge in sub-header
   const routeBadge = document.getElementById('current-route-name');
   if (routeBadge) {
-    if (route === 'home') routeBadge.textContent = 'plAds/home';
+    if (route === 'home') routeBadge.textContent = 'plAds/home (Real AdSense Hub)';
     if (route === 'img') routeBadge.textContent = 'plAds/img (or /api/img)';
     if (route === 'vid') routeBadge.textContent = 'plAds/vid (or /api/vid)';
-    if (route === 'api') routeBadge.textContent = '/enter/api (API Key Hub)';
+    if (route === 'api') routeBadge.textContent = '/enter/api (API Key Portal)';
   }
+
+  // Close mobile sidebar if open
+  closeMobileSidebar();
 
   window.scrollTo({ top: 0, behavior: 'smooth' });
 
@@ -78,7 +83,26 @@ function setActiveRoute(route) {
   triggerAdSensePush();
 }
 
-// Push AdSense slots safely without crashing on adblock or sandboxing
+// Mobile Left Sidebar Drawer Controls
+function openMobileSidebar() {
+  state.isMobileSidebarOpen = true;
+  const drawer = document.getElementById('mobile-sidebar');
+  const backdrop = document.getElementById('mobile-backdrop');
+  if (drawer) drawer.classList.add('open');
+  if (backdrop) backdrop.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeMobileSidebar() {
+  state.isMobileSidebarOpen = false;
+  const drawer = document.getElementById('mobile-sidebar');
+  const backdrop = document.getElementById('mobile-backdrop');
+  if (drawer) drawer.classList.remove('open');
+  if (backdrop) backdrop.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// Push AdSense slots safely
 function triggerAdSensePush() {
   try {
     if (window.adsbygoogle && Array.isArray(window.adsbygoogle)) {
@@ -145,7 +169,7 @@ function renderApiKeysList() {
       const vidEmbed = `<iframe src="${origin}/api/${item.key}/vid" width="100%" height="360" frameborder="0" scrolling="no"></iframe>`;
 
       return `
-      <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
+      <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100">
           <div>
             <div class="flex items-center gap-2">
@@ -264,6 +288,21 @@ window.copyToClipboard = function (text, btnId) {
 // Global App Initialization
 document.addEventListener('DOMContentLoaded', () => {
   initRouter();
+
+  // Mobile Sidebar Hamburger & Close Triggers
+  const openSidebarBtn = document.getElementById('btn-open-sidebar');
+  const closeSidebarBtn = document.getElementById('btn-close-sidebar');
+  const backdrop = document.getElementById('mobile-backdrop');
+
+  if (openSidebarBtn) {
+    openSidebarBtn.addEventListener('click', openMobileSidebar);
+  }
+  if (closeSidebarBtn) {
+    closeSidebarBtn.addEventListener('click', closeMobileSidebar);
+  }
+  if (backdrop) {
+    backdrop.addEventListener('click', closeMobileSidebar);
+  }
 
   // Create API Key Form Handler
   const createKeyForm = document.getElementById('create-api-key-form');
