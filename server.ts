@@ -97,6 +97,7 @@ function renderBlankWhiteAdHtml(type: 'image' | 'video', remainingReqs: number):
   <title>plAds - Real Google AdSense</title>
   <meta name="google-adsense-account" content="${ADSENSE_CLIENT}">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}" crossorigin="anonymous"></script>
+  <script async custom-element="amp-auto-ads" src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body {
@@ -126,6 +127,7 @@ function renderBlankWhiteAdHtml(type: 'image' | 'video', remainingReqs: number):
   </style>
 </head>
 <body>
+  <amp-auto-ads type="adsense" data-ad-client="${ADSENSE_CLIENT}"></amp-auto-ads>
   <div class="ad-container">
     <ins class="adsbygoogle"
          data-ad-client="${ADSENSE_CLIENT}"

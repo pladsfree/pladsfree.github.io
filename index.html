@@ -16,6 +16,11 @@
     <!-- Google AdSense Library Script -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3659618950683210" crossorigin="anonymous"></script>
 
+    <!-- AMP Auto Ads Script for Google AdSense -->
+    <script async custom-element="amp-auto-ads"
+            src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
+    </script>
+
     <!-- Local Standalone Tailwind Browser Engine -->
     <script src="./src/tailwind.js"></script>
 
@@ -23,6 +28,11 @@
     <link rel="stylesheet" href="./src/style.css" />
   </head>
   <body class="min-h-full flex flex-col bg-slate-100 text-slate-900 antialiased font-sans pb-24 pl-[42px]">
+
+    <!-- Google AdSense AMP Auto Ads -->
+    <amp-auto-ads type="adsense"
+            data-ad-client="ca-pub-3659618950683210">
+    </amp-auto-ads>
 
     <!-- SIDEBAR BACKDROP OVERLAY (Closes sidebar on click from anywhere) -->
     <div id="sidebar-backdrop" class="fixed inset-0 bg-slate-950/50 z-40 sidebar-backdrop backdrop-blur-xs cursor-pointer"></div>
@@ -54,14 +64,14 @@
 
           <!-- Vertical Route Icons -->
           <div class="flex flex-col items-center gap-1.5">
-            <a href="#home" data-route="home" class="rail-nav-item nav-link w-7 h-7 rounded-lg text-slate-600 hover:text-blue-600 hover:bg-slate-100 flex items-center justify-center transition-colors" title="plAds/home">
+            <a href="#home" data-route="home" class="rail-nav-item nav-link w-7 h-7 rounded-lg text-slate-600 hover:text-blue-600 hover:bg-slate-100 flex items-center justify-center transition-colors" title="Home">
               <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                 <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                 <polyline points="9 22 9 12 15 12 15 22"></polyline>
               </svg>
             </a>
 
-            <a href="#img" data-route="img" class="rail-nav-item nav-link w-7 h-7 rounded-lg text-slate-600 hover:text-emerald-600 hover:bg-slate-100 flex items-center justify-center transition-colors" title="plAds/img">
+            <a href="#img" data-route="img" class="rail-nav-item nav-link w-7 h-7 rounded-lg text-slate-600 hover:text-emerald-600 hover:bg-slate-100 flex items-center justify-center transition-colors" title="Image Ads">
               <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                 <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
                 <circle cx="8.5" cy="8.5" r="1.5"></circle>
@@ -69,14 +79,14 @@
               </svg>
             </a>
 
-            <a href="#vid" data-route="vid" class="rail-nav-item nav-link w-7 h-7 rounded-lg text-slate-600 hover:text-indigo-600 hover:bg-slate-100 flex items-center justify-center transition-colors" title="plAds/vid">
+            <a href="#vid" data-route="vid" class="rail-nav-item nav-link w-7 h-7 rounded-lg text-slate-600 hover:text-indigo-600 hover:bg-slate-100 flex items-center justify-center transition-colors" title="Video Ads">
               <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                 <polygon points="23 7 16 12 23 17 23 7"></polygon>
                 <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
               </svg>
             </a>
 
-            <a href="#api" data-route="api" class="rail-nav-item nav-link w-7 h-7 rounded-lg text-slate-600 hover:text-amber-600 hover:bg-slate-100 flex items-center justify-center transition-colors" title="/enter/api (Key Portal)">
+            <a href="#api" data-route="api" class="rail-nav-item nav-link w-7 h-7 rounded-lg text-slate-600 hover:text-amber-600 hover:bg-slate-100 flex items-center justify-center transition-colors" title="API Keys">
               <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                 <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path>
               </svg>
@@ -110,13 +120,13 @@
               <div>
                 <div class="flex items-center gap-1.5">
                   <span class="text-xl font-black tracking-tight text-slate-900">pl<span class="text-blue-600">Ads</span></span>
-                  <span class="text-[9px] font-bold px-1 py-0.5 rounded bg-emerald-100 text-emerald-800">REAL ADS</span>
+                  <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800">REAL ADS</span>
                 </div>
-                <p class="text-[10px] text-slate-500 font-medium">Free Ad Hosting</p>
+                <p class="text-[10px] text-slate-500 font-medium">Free Ad Network</p>
               </div>
             </div>
 
-            <!-- Explicit Exit Button with X SVG -->
+            <!-- Exit Button with X SVG -->
             <button id="btn-close-sidebar" class="p-2 rounded-xl text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors cursor-pointer border border-slate-200 shadow-xs" title="Exit / Close Sidebar" aria-label="Exit sidebar">
               <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -134,7 +144,7 @@
                 <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                 <polyline points="9 22 9 12 15 12 15 22"></polyline>
               </svg>
-              <span>plAds/home</span>
+              <span>Home Hub</span>
             </a>
 
             <a href="#img" data-route="img" class="nav-link w-full px-3.5 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-3 transition-colors text-slate-700 hover:bg-slate-100">
@@ -143,7 +153,7 @@
                 <circle cx="8.5" cy="8.5" r="1.5"></circle>
                 <polyline points="21 15 16 10 5 21"></polyline>
               </svg>
-              <span>plAds/img</span>
+              <span>Image &amp; Display Ads</span>
             </a>
 
             <a href="#vid" data-route="vid" class="nav-link w-full px-3.5 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-3 transition-colors text-slate-700 hover:bg-slate-100">
@@ -151,19 +161,19 @@
                 <polygon points="23 7 16 12 23 17 23 7"></polygon>
                 <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
               </svg>
-              <span>plAds/vid</span>
+              <span>Video &amp; Outstream</span>
             </a>
 
             <a href="#api" data-route="api" class="nav-link w-full px-3.5 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-3 transition-colors text-slate-700 hover:bg-slate-100">
               <svg class="w-4 h-4 text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                 <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path>
               </svg>
-              <span>/enter/api (Key Hub)</span>
+              <span>API Key Generator</span>
             </a>
 
             <!-- Subpaths Quick Links -->
             <div class="mt-4 pt-3 border-t border-slate-100 space-y-1">
-              <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-3 mb-1">Direct Subpaths</div>
+              <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-3 mb-1">Direct API Endpoints</div>
               <a href="/api" target="_blank" class="block px-3 py-1.5 text-[11px] text-blue-600 hover:underline font-mono">/api (Endpoints Directory)</a>
               <a href="/api/img" target="_blank" class="block px-3 py-1.5 text-[11px] text-blue-600 hover:underline font-mono">/api/img (Blank White Image)</a>
               <a href="/api/vid" target="_blank" class="block px-3 py-1.5 text-[11px] text-indigo-600 hover:underline font-mono">/api/vid (Blank White Video)</a>
@@ -177,10 +187,8 @@
             <div class="text-[10px] font-mono text-slate-500 truncate">
               ca-pub-3659618950683210
             </div>
-            <div class="flex items-center gap-1 text-[10px] text-emerald-600 font-bold">
-              <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <polyline points="20 6 9 17 4 12"></polyline>
-              </svg>
+            <div class="flex items-center gap-1.5 text-[10px] text-emerald-600 font-bold">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
               <span>ads.txt Verified Live</span>
             </div>
           </div>
@@ -190,48 +198,20 @@
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
               <polyline points="15 18 9 12 15 6"></polyline>
             </svg>
-            <span>Exit / Collapse Sidebar</span>
+            <span>Exit Sidebar</span>
           </button>
         </div>
 
       </div>
     </aside>
 
-    <!-- TOP AD TICKER & ADSENSE STATUS -->
-    <div id="top-ad-ticker" class="bg-gradient-to-r from-blue-700 via-indigo-700 to-slate-900 text-white text-xs py-2 shadow-sm border-b border-blue-800">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex items-center justify-between">
-        <div class="flex items-center gap-2 flex-shrink-0 z-10 pr-3">
-          <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-400 text-slate-950 uppercase tracking-wider">
-            <svg class="w-3 h-3 mr-1 inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-            </svg>
-            Real Google AdSense
-          </span>
-          <span class="font-semibold text-blue-100 hidden sm:inline">Publisher: ca-pub-3659618950683210</span>
-        </div>
-
-        <div class="flex items-center gap-4 flex-shrink-0 text-[11px] text-blue-200">
-          <a href="/api" target="_blank" class="hover:underline font-mono text-amber-300">
-            /api Directory
-          </a>
-          <a href="/ads.txt" target="_blank" class="hover:underline flex items-center gap-1 font-mono">
-            <svg class="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <polyline points="20 6 9 17 4 12"></polyline>
-            </svg>
-            ads.txt
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <!-- MAIN HEADER NAVBAR -->
-    <header id="main-header" class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
+    <!-- UNIFIED CLEAN HEADER NAVBAR -->
+    <header id="main-header" class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
           
-          <!-- MOBILE HAMBURGER BUTTON & BRAND LOGO -->
+          <!-- BRAND LOGO & MOBILE HAMBURGER -->
           <div class="flex items-center gap-3">
-            <!-- Hamburger button for mobile (visible only on mobile) -->
             <button id="btn-open-sidebar" class="md:hidden p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors cursor-pointer border border-slate-200" aria-label="Open mobile menu">
               <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="3" y1="12" x2="21" y2="12"></line>
@@ -242,31 +222,28 @@
 
             <!-- Brand Logo -->
             <a href="#home" class="flex items-center gap-2.5 group focus:outline-none">
-              <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-md group-hover:scale-105 transition-transform">
-                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-sm group-hover:scale-105 transition-transform">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                   <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
                   <line x1="8" y1="21" x2="16" y2="21"></line>
                   <line x1="12" y1="17" x2="12" y2="21"></line>
                 </svg>
               </div>
-              <div>
-                <div class="flex items-center gap-1.5">
-                  <span class="text-2xl font-black tracking-tight text-slate-900">pl<span class="text-blue-600">Ads</span></span>
-                  <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 tracking-wider">REAL ADS</span>
-                </div>
-                <p class="text-[11px] text-slate-500 font-medium hidden sm:block">Google AdSense Free Ad Network</p>
+              <div class="flex items-center gap-2">
+                <span class="text-xl font-black tracking-tight text-slate-900">pl<span class="text-blue-600">Ads</span></span>
+                <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 tracking-wider hidden sm:inline-block">LIVE NETWORK</span>
               </div>
             </a>
           </div>
 
-          <!-- TABLET & DESKTOP HORIZONTAL NAVBAR (hidden on mobile, visible on md and lg) -->
-          <nav id="desktop-navbar" class="hidden md:flex items-center gap-1 bg-slate-100 p-1.5 rounded-xl border border-slate-200/80">
+          <!-- DESKTOP NAVBAR -->
+          <nav id="desktop-navbar" class="hidden md:flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200">
             <a href="#home" data-route="home" class="nav-link px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all">
               <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                 <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                 <polyline points="9 22 9 12 15 12 15 22"></polyline>
               </svg>
-              <span>plAds/home</span>
+              <span>Home</span>
             </a>
 
             <a href="#img" data-route="img" class="nav-link px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all">
@@ -275,7 +252,7 @@
                 <circle cx="8.5" cy="8.5" r="1.5"></circle>
                 <polyline points="21 15 16 10 5 21"></polyline>
               </svg>
-              <span>plAds/img</span>
+              <span>Image Ads</span>
             </a>
 
             <a href="#vid" data-route="vid" class="nav-link px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all">
@@ -283,21 +260,27 @@
                 <polygon points="23 7 16 12 23 17 23 7"></polygon>
                 <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
               </svg>
-              <span>plAds/vid</span>
+              <span>Video Ads</span>
             </a>
 
             <a href="#api" data-route="api" class="nav-link px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all">
               <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                 <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path>
               </svg>
-              <span>/enter/api</span>
+              <span>API Keys</span>
             </a>
           </nav>
 
-          <!-- API DIRECTORY BUTTON -->
-          <div class="flex items-center gap-2">
-            <a href="/api" target="_blank" class="px-3.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-mono font-bold flex items-center gap-1.5 transition-colors shadow-sm">
-              <span>/api subpaths</span>
+          <!-- RIGHT CONTROLS: VERIFIED STATUS & DIRECTORY -->
+          <div class="flex items-center gap-3">
+            <div class="hidden lg:flex items-center gap-2 px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span class="font-mono text-slate-600 text-[11px]">ca-pub-3659618950683210</span>
+              <a href="/ads.txt" target="_blank" class="text-blue-600 hover:underline font-mono text-[11px] ml-1">ads.txt</a>
+            </div>
+
+            <a href="/api" target="_blank" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-mono font-bold flex items-center gap-1 transition-colors shadow-xs">
+              <span>/api</span>
             </a>
           </div>
 
@@ -305,34 +288,85 @@
       </div>
     </header>
 
-    <!-- SUB HEADER INDICATOR -->
-    <div id="route-indicator-bar" class="bg-white border-b border-slate-200 py-2">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1">
-        <div class="flex items-center gap-2">
-          <span class="text-xs text-slate-500 font-medium">Active Route:</span>
-          <span id="current-route-name" class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200 font-mono">plAds/home</span>
-        </div>
-        <div class="flex items-center gap-3 text-xs text-slate-600 font-mono">
-          <span>Subpaths:</span>
-          <a href="/api/img" target="_blank" class="text-blue-600 hover:underline font-bold">/api/img</a>
-          <a href="/api/vid" target="_blank" class="text-indigo-600 hover:underline font-bold">/api/vid</a>
-          <a href="/api" target="_blank" class="text-slate-800 hover:underline font-bold">/api</a>
-        </div>
-      </div>
-    </div>
-
     <!-- MAIN BODY CONTENT -->
-    <main id="main-content" class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8">
+    <main id="main-content" class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
 
       <!-- ========================================================================= -->
-      <!-- VIEW 1: plAds/home (HOME PACKED WITH REAL GOOGLE ADSENSE UNITS) -->
+      <!-- VIEW 1: plAds/home (STREAMLINED, MODERN AD SHOWCASE & EMBED ENGINE) -->
       <!-- ========================================================================= -->
       <section id="view-home" class="space-y-6">
 
-        <!-- BILLBOARD REAL ADSENSE UNIT -->
+        <!-- HERO INTEGRATION BANNER -->
+        <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div class="space-y-1.5 max-w-2xl">
+              <div class="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-200">
+                <svg class="w-3.5 h-3.5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+                <span>Google AdSense &amp; AMP Auto Ads Enabled</span>
+              </div>
+              <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">Free Ad Hosting Platform</h1>
+              <p class="text-sm text-slate-600 leading-relaxed">
+                Host, iframe, and stream verified Google AdSense ad units directly into any website with zero configuration.
+              </p>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2">
+              <a href="#api" class="px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition-all shadow-xs flex items-center gap-2">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path>
+                </svg>
+                <span>Get API Key</span>
+              </a>
+              <a href="/api" target="_blank" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl text-xs font-bold transition-colors border border-slate-200">
+                API Docs
+              </a>
+            </div>
+          </div>
+
+          <!-- Quick Copy Embed Codes -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-3 border-t border-slate-100">
+            <!-- Image Embed Snippet -->
+            <div class="bg-slate-900 text-slate-200 p-3.5 rounded-xl space-y-2 border border-slate-800">
+              <div class="flex items-center justify-between text-xs">
+                <span class="font-bold text-blue-400 font-mono">/api/img</span>
+                <button onclick="copyToClipboard('&lt;iframe src=&quot;' + window.location.origin + '/api/img&quot; width=&quot;100%&quot; height=&quot;250&quot; frameborder=&quot;0&quot; scrolling=&quot;no&quot;&gt;&lt;/iframe&gt;', 'btn-quick-copy-img')" id="btn-quick-copy-img" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-white rounded text-[11px] font-medium transition-colors cursor-pointer flex items-center gap-1.5">
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <span>Copy Image IFrame</span>
+                </button>
+              </div>
+              <div class="font-mono text-[11px] text-slate-300 break-all select-all bg-black/40 p-2 rounded">
+                &lt;iframe src="/api/img" width="100%" height="250" frameborder="0"&gt;&lt;/iframe&gt;
+              </div>
+            </div>
+
+            <!-- Video Embed Snippet -->
+            <div class="bg-slate-900 text-slate-200 p-3.5 rounded-xl space-y-2 border border-slate-800">
+              <div class="flex items-center justify-between text-xs">
+                <span class="font-bold text-indigo-400 font-mono">/api/vid</span>
+                <button onclick="copyToClipboard('&lt;iframe src=&quot;' + window.location.origin + '/api/vid&quot; width=&quot;100%&quot; height=&quot;360&quot; frameborder=&quot;0&quot; scrolling=&quot;no&quot;&gt;&lt;/iframe&gt;', 'btn-quick-copy-vid')" id="btn-quick-copy-vid" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-white rounded text-[11px] font-medium transition-colors cursor-pointer flex items-center gap-1.5">
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <span>Copy Video IFrame</span>
+                </button>
+              </div>
+              <div class="font-mono text-[11px] text-slate-300 break-all select-all bg-black/40 p-2 rounded">
+                &lt;iframe src="/api/vid" width="100%" height="360" frameborder="0"&gt;&lt;/iframe&gt;
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FEATURED BILLBOARD AD UNIT (Real AdSense + AMP Auto Ads) -->
         <div id="home-top-billboard" class="ad-slot-frame p-4 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-2">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-xs">
-            <span class="ad-badge bg-emerald-50 text-emerald-700 border-emerald-200">Google AdSense • Top Billboard</span>
+          <div class="flex items-center justify-between text-xs">
+            <span class="ad-badge bg-emerald-50 text-emerald-700 border-emerald-200">Google AdSense • Responsive Unit</span>
             <span class="font-mono text-slate-400 text-[11px]">ca-pub-3659618950683210</span>
           </div>
 
@@ -347,171 +381,86 @@
           </div>
         </div>
 
-        <!-- 3-COLUMN REAL ADSENSE HOME LAYOUT -->
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- 2-COLUMN BALANCED AD SHOWCASE -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-          <!-- LEFT COLUMN: REAL ADSENSE VERTICAL SKYSCRAPER -->
-          <aside id="home-left-ads" class="lg:col-span-3 space-y-6">
-            
-            <div class="ad-slot-frame p-4 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-2">
-              <div class="flex items-center justify-between pb-1 border-b border-slate-100 text-xs">
-                <span class="ad-badge bg-blue-50 text-blue-700 border-blue-200">AdSense Skyscraper</span>
-                <span class="text-[10px] text-slate-400 font-mono">160x600</span>
-              </div>
-              <div class="w-full min-h-[600px] bg-white flex items-center justify-center">
-                <ins class="adsbygoogle"
-                     style="display:block; width:100%; height:600px;"
-                     data-ad-client="ca-pub-3659618950683210"
-                     data-ad-slot="1000000002"
-                     data-ad-format="vertical"
-                     data-full-width-responsive="true"></ins>
-              </div>
+          <!-- Left Unit: Display Ad -->
+          <div class="ad-slot-frame p-5 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-3">
+            <div class="flex items-center justify-between text-xs pb-2 border-b border-slate-100">
+              <span class="ad-badge bg-blue-50 text-blue-700 border-blue-200">Display Ad Unit</span>
+              <span class="text-[10px] text-slate-400 font-mono">300x250 Medium</span>
             </div>
-
-            <!-- API IFrame Information Box -->
-            <div class="p-4 bg-slate-900 text-white rounded-2xl shadow space-y-3">
-              <div class="flex items-center gap-2">
-                <svg class="w-4 h-4 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                  <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path>
-                </svg>
-                <span class="font-bold text-xs">API Ad Endpoints</span>
-              </div>
-              <p class="text-[11px] text-slate-300 leading-relaxed">
-                Embed pure real ads on any website using our API subpaths:
-              </p>
-              <div class="space-y-1.5 text-[10px] font-mono">
-                <div class="bg-black/50 p-1.5 rounded text-blue-300">&lt;iframe src="/api/img" width="100%" height="250"&gt;&lt;/iframe&gt;</div>
-                <div class="bg-black/50 p-1.5 rounded text-indigo-300">&lt;iframe src="/api/vid" width="100%" height="360"&gt;&lt;/iframe&gt;</div>
-              </div>
-              <a href="#api" class="block text-center py-2 bg-blue-600 hover:bg-blue-500 rounded text-xs font-bold transition-colors">
-                Create API Key →
-              </a>
+            <div class="w-full min-h-[250px] bg-white flex items-center justify-center">
+              <ins class="adsbygoogle"
+                   style="display:block; width:100%; height:250px;"
+                   data-ad-client="ca-pub-3659618950683210"
+                   data-ad-slot="1000000003"
+                   data-ad-format="rectangle"
+                   data-full-width-responsive="true"></ins>
             </div>
-
-          </aside>
-
-          <!-- CENTER FEED: REAL ADSENSE UNITS -->
-          <div id="home-center-ads" class="lg:col-span-6 space-y-6">
-
-            <!-- Real AdSense Grid Slot 1 & 2 -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              
-              <div class="ad-slot-frame p-4 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-2">
-                <div class="flex items-center justify-between text-xs">
-                  <span class="ad-badge">AdSense 300x250</span>
-                  <span class="text-[10px] text-slate-400 font-mono">Slot 1000000003</span>
-                </div>
-                <div class="w-full min-h-[250px] bg-white flex items-center justify-center">
-                  <ins class="adsbygoogle"
-                       style="display:block; width:100%; height:250px;"
-                       data-ad-client="ca-pub-3659618950683210"
-                       data-ad-slot="1000000003"
-                       data-ad-format="rectangle"
-                       data-full-width-responsive="true"></ins>
-                </div>
-              </div>
-
-              <div class="ad-slot-frame p-4 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-2">
-                <div class="flex items-center justify-between text-xs">
-                  <span class="ad-badge">AdSense 300x250</span>
-                  <span class="text-[10px] text-slate-400 font-mono">Slot 1000000004</span>
-                </div>
-                <div class="w-full min-h-[250px] bg-white flex items-center justify-center">
-                  <ins class="adsbygoogle"
-                       style="display:block; width:100%; height:250px;"
-                       data-ad-client="ca-pub-3659618950683210"
-                       data-ad-slot="1000000004"
-                       data-ad-format="rectangle"
-                       data-full-width-responsive="true"></ins>
-                </div>
-              </div>
-
-            </div>
-
-            <!-- AdSense In-Feed Fluid Unit -->
-            <div class="ad-slot-frame p-4 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-2">
-              <div class="flex items-center justify-between text-xs">
-                <span class="ad-badge bg-emerald-50 text-emerald-700 border-emerald-200">AdSense In-Feed Responsive Unit</span>
-                <span class="text-[10px] text-slate-400 font-mono">Native Stream</span>
-              </div>
-              <div class="w-full min-h-[160px] bg-white flex items-center justify-center">
-                <ins class="adsbygoogle"
-                     style="display:block; width:100%;"
-                     data-ad-format="fluid"
-                     data-ad-layout-key="-fb+5w+4e-db+86"
-                     data-ad-client="ca-pub-3659618950683210"
-                     data-ad-slot="1000000005"></ins>
-              </div>
-            </div>
-
-            <!-- Real AdSense Grid Slot 3 & 4 -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              
-              <div class="ad-slot-frame p-4 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-2">
-                <div class="flex items-center justify-between text-xs">
-                  <span class="ad-badge">AdSense 300x250</span>
-                  <span class="text-[10px] text-slate-400 font-mono">Slot 1000000006</span>
-                </div>
-                <div class="w-full min-h-[250px] bg-white flex items-center justify-center">
-                  <ins class="adsbygoogle"
-                       style="display:block; width:100%; height:250px;"
-                       data-ad-client="ca-pub-3659618950683210"
-                       data-ad-slot="1000000006"
-                       data-ad-format="rectangle"
-                       data-full-width-responsive="true"></ins>
-                </div>
-              </div>
-
-              <div class="ad-slot-frame p-4 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-2">
-                <div class="flex items-center justify-between text-xs">
-                  <span class="ad-badge">AdSense 300x250</span>
-                  <span class="text-[10px] text-slate-400 font-mono">Slot 1000000007</span>
-                </div>
-                <div class="w-full min-h-[250px] bg-white flex items-center justify-center">
-                  <ins class="adsbygoogle"
-                       style="display:block; width:100%; height:250px;"
-                       data-ad-client="ca-pub-3659618950683210"
-                       data-ad-slot="1000000007"
-                       data-ad-format="rectangle"
-                       data-full-width-responsive="true"></ins>
-                </div>
-              </div>
-
-            </div>
-
           </div>
 
-          <!-- RIGHT COLUMN: REAL ADSENSE HALF-PAGE UNIT -->
-          <aside id="home-right-ads" class="lg:col-span-3 space-y-6">
-
-            <div class="ad-slot-frame p-4 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-2">
-              <div class="flex items-center justify-between text-xs pb-1 border-b border-slate-100">
-                <span class="ad-badge bg-blue-50 text-blue-700 border-blue-200">AdSense Half Page</span>
-                <span class="text-[10px] text-slate-400 font-mono">300x600</span>
-              </div>
-              <div class="w-full min-h-[600px] bg-white flex items-center justify-center">
-                <ins class="adsbygoogle"
-                     style="display:block; width:100%; height:600px;"
-                     data-ad-client="ca-pub-3659618950683210"
-                     data-ad-slot="1000000008"
-                     data-ad-format="vertical"
-                     data-full-width-responsive="true"></ins>
-              </div>
+          <!-- Right Unit: Outstream / Video Companion -->
+          <div class="ad-slot-frame p-5 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-3">
+            <div class="flex items-center justify-between text-xs pb-2 border-b border-slate-100">
+              <span class="ad-badge bg-indigo-50 text-indigo-700 border-indigo-200">Companion Ad Unit</span>
+              <span class="text-[10px] text-slate-400 font-mono">Responsive Stream</span>
             </div>
+            <div class="w-full min-h-[250px] bg-white flex items-center justify-center">
+              <ins class="adsbygoogle"
+                   style="display:block; width:100%; height:250px;"
+                   data-ad-client="ca-pub-3659618950683210"
+                   data-ad-slot="1000000004"
+                   data-ad-format="rectangle"
+                   data-full-width-responsive="true"></ins>
+            </div>
+          </div>
 
-          </aside>
+        </div>
 
+        <!-- 3 VALUE HIGHLIGHT CARDS -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-2">
+            <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                <line x1="8" y1="21" x2="16" y2="21"></line>
+                <line x1="12" y1="17" x2="12" y2="21"></line>
+              </svg>
+            </div>
+            <h2 class="font-bold text-sm text-slate-900">Zero Setup Embeds</h2>
+            <p class="text-xs text-slate-500">Iframe `/api/img` or `/api/vid` directly into HTML with automatic CORS and frame support.</p>
+          </div>
+
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-2">
+            <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+            </div>
+            <h2 class="font-bold text-sm text-slate-900">Free Tier Domain Quota</h2>
+            <p class="text-xs text-slate-500">20 free daily ad requests per domain automatically tracked via HTTP referer.</p>
+          </div>
+
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-2">
+            <div class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path>
+              </svg>
+            </div>
+            <h2 class="font-bold text-sm text-slate-900">Developer API Keys</h2>
+            <p class="text-xs text-slate-500">Generate free API keys to unlock 60 requests per 12 hours (120 reqs/day).</p>
+          </div>
         </div>
 
       </section>
 
-
       <!-- ========================================================================= -->
-      <!-- VIEW 2: plAds/img (IMAGE ADS WITH SITE UI + API IFRAME EXPLANATION) -->
+      <!-- VIEW 2: plAds/img (IMAGE & DISPLAY ADS VIEW) -->
       <!-- ========================================================================= -->
-      <section id="view-img" class="space-y-8" style="display: none;">
+      <section id="view-img" class="space-y-6" style="display: none;">
 
-        <!-- Header -->
         <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
           <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div class="space-y-1">
@@ -521,118 +470,78 @@
                   <circle cx="8.5" cy="8.5" r="1.5"></circle>
                   <polyline points="21 15 16 10 5 21"></polyline>
                 </svg>
-                <span>plAds/img (Image Ads)</span>
+                <span>Image &amp; Display Ad Units</span>
               </div>
-              <h1 class="text-2xl sm:text-3xl font-black text-slate-900">Real Google Image &amp; Display Ads</h1>
-              <p class="text-sm text-slate-600">Pure real Google AdSense units or direct API embed via <a href="/api/img" target="_blank" class="text-blue-600 font-bold hover:underline">/api/img</a>.</p>
+              <h1 class="text-2xl font-black text-slate-900">Google Display Ads</h1>
+              <p class="text-xs text-slate-600">Standard responsive image banners and display slots for website sidebars and feeds.</p>
             </div>
 
-            <!-- Quick API Copy Link -->
-            <div class="flex items-center gap-2">
-              <button onclick="copyToClipboard('&lt;iframe src=&quot;' + window.location.origin + '/api/img&quot; width=&quot;100%&quot; height=&quot;250&quot; frameborder=&quot;0&quot; scrolling=&quot;no&quot;&gt;&lt;/iframe&gt;', 'copy-img-api-frame')" id="copy-img-api-frame" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm">
-                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                <span>Copy &lt;iframe&gt; for /api/img</span>
-              </button>
-            </div>
+            <button onclick="copyToClipboard('&lt;iframe src=&quot;' + window.location.origin + '/api/img&quot; width=&quot;100%&quot; height=&quot;250&quot; frameborder=&quot;0&quot; scrolling=&quot;no&quot;&gt;&lt;/iframe&gt;', 'copy-img-view-btn')" id="copy-img-view-btn" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs whitespace-nowrap">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span>Copy /api/img IFrame</span>
+            </button>
           </div>
         </div>
 
-        <!-- REAL IMAGE AD UNITS DISPLAY -->
-        <div class="space-y-6">
-
-          <!-- Leaderboard Image Ad Unit (728x90) -->
-          <div class="ad-slot-frame p-5 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-2">
-            <div class="flex items-center justify-between text-xs">
-              <span class="ad-badge bg-blue-50 text-blue-700 border-blue-200">AdSense 728x90 Leaderboard</span>
-              <span class="font-mono text-slate-400 text-[11px]">Slot 2000000001</span>
-            </div>
-            <div class="w-full min-h-[90px] bg-white flex items-center justify-center">
-              <ins class="adsbygoogle"
-                   style="display:block; width:100%; height:90px;"
-                   data-ad-client="ca-pub-3659618950683210"
-                   data-ad-slot="2000000001"
-                   data-ad-format="horizontal"
-                   data-full-width-responsive="true"></ins>
-            </div>
+        <!-- Leaderboard Unit -->
+        <div class="ad-slot-frame p-5 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-2">
+          <div class="flex items-center justify-between text-xs pb-1 border-b border-slate-100">
+            <span class="ad-badge bg-blue-50 text-blue-700 border-blue-200">Leaderboard Unit</span>
+            <span class="font-mono text-slate-400 text-[11px]">728x90 / Responsive</span>
           </div>
-
-          <!-- Medium Rectangles (300x250 x 3) -->
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-            <div class="ad-slot-frame p-5 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-2">
-              <div class="flex items-center justify-between text-xs">
-                <span class="ad-badge">AdSense 300x250</span>
-                <span class="text-[10px] font-mono text-slate-400">#2000000002</span>
-              </div>
-              <div class="w-full min-h-[250px] bg-white flex items-center justify-center">
-                <ins class="adsbygoogle"
-                     style="display:block; width:100%; height:250px;"
-                     data-ad-client="ca-pub-3659618950683210"
-                     data-ad-slot="2000000002"
-                     data-ad-format="rectangle"
-                     data-full-width-responsive="true"></ins>
-              </div>
-            </div>
-
-            <div class="ad-slot-frame p-5 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-2">
-              <div class="flex items-center justify-between text-xs">
-                <span class="ad-badge">AdSense 300x250</span>
-                <span class="text-[10px] font-mono text-slate-400">#2000000003</span>
-              </div>
-              <div class="w-full min-h-[250px] bg-white flex items-center justify-center">
-                <ins class="adsbygoogle"
-                     style="display:block; width:100%; height:250px;"
-                     data-ad-client="ca-pub-3659618950683210"
-                     data-ad-slot="2000000003"
-                     data-ad-format="rectangle"
-                     data-full-width-responsive="true"></ins>
-              </div>
-            </div>
-
-            <div class="ad-slot-frame p-5 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-2">
-              <div class="flex items-center justify-between text-xs">
-                <span class="ad-badge">AdSense 300x250</span>
-                <span class="text-[10px] font-mono text-slate-400">#2000000004</span>
-              </div>
-              <div class="w-full min-h-[250px] bg-white flex items-center justify-center">
-                <ins class="adsbygoogle"
-                     style="display:block; width:100%; height:250px;"
-                     data-ad-client="ca-pub-3659618950683210"
-                     data-ad-slot="2000000004"
-                     data-ad-format="rectangle"
-                     data-full-width-responsive="true"></ins>
-              </div>
-            </div>
-
+          <div class="w-full min-h-[90px] bg-white flex items-center justify-center">
+            <ins class="adsbygoogle"
+                 style="display:block; width:100%; height:90px;"
+                 data-ad-client="ca-pub-3659618950683210"
+                 data-ad-slot="2000000001"
+                 data-ad-format="horizontal"
+                 data-full-width-responsive="true"></ins>
           </div>
+        </div>
 
-          <!-- Billboard Unit (970x250) -->
+        <!-- 2 Column Display Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div class="ad-slot-frame p-5 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-2">
-            <div class="flex items-center justify-between text-xs">
-              <span class="ad-badge bg-emerald-50 text-emerald-700 border-emerald-200">AdSense 970x250 Billboard</span>
-              <span class="font-mono text-slate-400 text-[11px]">Slot 2000000005</span>
+            <div class="flex items-center justify-between text-xs pb-1 border-b border-slate-100">
+              <span class="ad-badge">Medium Rectangle</span>
+              <span class="text-[10px] font-mono text-slate-400">300x250</span>
             </div>
             <div class="w-full min-h-[250px] bg-white flex items-center justify-center">
               <ins class="adsbygoogle"
                    style="display:block; width:100%; height:250px;"
                    data-ad-client="ca-pub-3659618950683210"
-                   data-ad-slot="2000000005"
-                   data-ad-format="auto"
+                   data-ad-slot="2000000002"
+                   data-ad-format="rectangle"
                    data-full-width-responsive="true"></ins>
             </div>
           </div>
 
+          <div class="ad-slot-frame p-5 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-2">
+            <div class="flex items-center justify-between text-xs pb-1 border-b border-slate-100">
+              <span class="ad-badge">Medium Rectangle</span>
+              <span class="text-[10px] font-mono text-slate-400">300x250</span>
+            </div>
+            <div class="w-full min-h-[250px] bg-white flex items-center justify-center">
+              <ins class="adsbygoogle"
+                   style="display:block; width:100%; height:250px;"
+                   data-ad-client="ca-pub-3659618950683210"
+                   data-ad-slot="2000000003"
+                   data-ad-format="rectangle"
+                   data-full-width-responsive="true"></ins>
+            </div>
+          </div>
         </div>
 
       </section>
 
-
       <!-- ========================================================================= -->
-      <!-- VIEW 3: plAds/vid (VIDEO ADS WITH SITE UI + API IFRAME EXPLANATION) -->
+      <!-- VIEW 3: plAds/vid (VIDEO & OUTSTREAM ADS VIEW) -->
       <!-- ========================================================================= -->
-      <section id="view-vid" class="space-y-8" style="display: none;">
+      <section id="view-vid" class="space-y-6" style="display: none;">
 
-        <!-- Header -->
         <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
           <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div class="space-y-1">
@@ -641,30 +550,28 @@
                   <polygon points="23 7 16 12 23 17 23 7"></polygon>
                   <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
                 </svg>
-                <span>plAds/vid (Video Ads)</span>
+                <span>Video &amp; Outstream Units</span>
               </div>
-              <h1 class="text-2xl sm:text-3xl font-black text-slate-900">Real Google Video &amp; Outstream Ads</h1>
-              <p class="text-sm text-slate-600">Video ad streaming units or direct API embed via <a href="/api/vid" target="_blank" class="text-indigo-600 font-bold hover:underline">/api/vid</a>.</p>
+              <h1 class="text-2xl font-black text-slate-900">Google Video &amp; Outstream Ads</h1>
+              <p class="text-xs text-slate-600">Video ad streaming slots with responsive 16:9 ratio and companion display units.</p>
             </div>
 
-            <!-- Quick API Copy Link -->
-            <div class="flex items-center gap-2">
-              <button onclick="copyToClipboard('&lt;iframe src=&quot;' + window.location.origin + '/api/vid&quot; width=&quot;100%&quot; height=&quot;360&quot; frameborder=&quot;0&quot; scrolling=&quot;no&quot;&gt;&lt;/iframe&gt;', 'copy-vid-api-frame')" id="copy-vid-api-frame" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm">
-                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                <span>Copy &lt;iframe&gt; for /api/vid</span>
-              </button>
-            </div>
+            <button onclick="copyToClipboard('&lt;iframe src=&quot;' + window.location.origin + '/api/vid&quot; width=&quot;100%&quot; height=&quot;360&quot; frameborder=&quot;0&quot; scrolling=&quot;no&quot;&gt;&lt;/iframe&gt;', 'copy-vid-view-btn')" id="copy-vid-view-btn" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs whitespace-nowrap">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span>Copy /api/vid IFrame</span>
+            </button>
           </div>
         </div>
 
-        <!-- REAL VIDEO ADS CONTAINERS -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-
-          <!-- Main Outstream / Video Ad Container -->
-          <div class="lg:col-span-8 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+          <!-- Main 16:9 Video Slot -->
+          <div class="lg:col-span-8 bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3">
             <div class="flex items-center justify-between pb-2 border-b border-slate-100 text-xs">
-              <span class="ad-badge bg-indigo-50 text-indigo-700 border-indigo-200">Google AdSense Video Unit</span>
-              <span class="text-xs font-mono text-slate-400">ca-pub-3659618950683210</span>
+              <span class="ad-badge bg-indigo-50 text-indigo-700 border-indigo-200">Outstream Player</span>
+              <span class="text-xs font-mono text-slate-400">16:9 Ratio</span>
             </div>
 
             <div class="w-full aspect-video bg-white rounded-xl p-2 flex items-center justify-center border border-slate-100">
@@ -677,131 +584,113 @@
             </div>
           </div>
 
-          <!-- Video Sidebar Units -->
-          <div class="lg:col-span-4 space-y-6">
-            
-            <div class="ad-slot-frame p-5 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-2">
-              <div class="flex items-center justify-between text-xs">
-                <span class="ad-badge">AdSense Video Companion</span>
-                <span class="text-[10px] font-mono text-slate-400">300x250</span>
-              </div>
-              <div class="w-full min-h-[250px] bg-white flex items-center justify-center">
-                <ins class="adsbygoogle"
-                     style="display:block; width:100%; height:250px;"
-                     data-ad-client="ca-pub-3659618950683210"
-                     data-ad-slot="3000000002"
-                     data-ad-format="rectangle"
-                     data-full-width-responsive="true"></ins>
-              </div>
+          <!-- Video Sidebar Companion -->
+          <div class="lg:col-span-4 bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100 text-xs">
+              <span class="ad-badge">Companion Unit</span>
+              <span class="text-[10px] font-mono text-slate-400">300x250</span>
             </div>
-
+            <div class="w-full min-h-[250px] bg-white flex items-center justify-center">
+              <ins class="adsbygoogle"
+                   style="display:block; width:100%; height:250px;"
+                   data-ad-client="ca-pub-3659618950683210"
+                   data-ad-slot="3000000002"
+                   data-ad-format="rectangle"
+                   data-full-width-responsive="true"></ins>
+            </div>
           </div>
-
         </div>
 
       </section>
 
-
       <!-- ========================================================================= -->
-      <!-- VIEW 4: /enter/api (API KEY GENERATOR & IFRAME DASHBOARD) -->
+      <!-- VIEW 4: /enter/api (DEVELOPER KEY PORTAL & SANDBOX TESTER) -->
       <!-- ========================================================================= -->
-      <section id="view-api" class="space-y-8" style="display: none;">
+      <section id="view-api" class="space-y-6" style="display: none;">
 
-        <!-- Header -->
-        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-2">
           <div class="flex items-center gap-2">
             <span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
-            <span class="text-xs font-bold uppercase tracking-wider text-blue-600">/enter/api • Developer Portal</span>
+            <span class="text-xs font-bold uppercase tracking-wider text-blue-600">Developer Portal</span>
           </div>
-          <h1 class="text-2xl sm:text-3xl font-black text-slate-900">API Key Hub &amp; Ad Request Engine</h1>
-          <p class="text-sm text-slate-600 leading-relaxed">
-            Need more than the default 20 free ad requests per domain? Create a Free Tier API Key below to unlock <strong class="text-slate-900 font-bold">60 ad requests per 12 hours (120 requests/day)</strong>.
+          <h1 class="text-2xl font-black text-slate-900">API Key Hub &amp; Request Engine</h1>
+          <p class="text-xs text-slate-600">
+            Generate free API keys to get 60 requests per 12 hours (120 reqs/day) for high-traffic websites.
           </p>
         </div>
 
-        <!-- QUOTA TIERS COMPARISON -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-          <!-- Tier 1: Public Domain Free -->
-          <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+        <!-- Quota Comparison Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Domain Tier -->
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-3">
             <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-slate-500 uppercase">Default Free Quota</span>
+              <span class="text-xs font-bold text-slate-500 uppercase">Domain Free Tier</span>
               <span class="ad-badge bg-slate-100 text-slate-700">No Key Needed</span>
             </div>
-            <div class="space-y-1">
-              <div class="text-2xl font-black text-slate-900">20 Ad Requests</div>
-              <p class="text-xs text-slate-500">Per domain per 24 hours</p>
+            <div>
+              <div class="text-2xl font-black text-slate-900">20 Requests / Day</div>
+              <p class="text-xs text-slate-500">Per domain tracked automatically</p>
             </div>
-            <div class="text-xs text-slate-600 space-y-2 pt-2 border-t border-slate-100">
-              <div>• Format: <code class="bg-slate-100 px-1.5 py-0.5 rounded font-mono text-blue-600">/api/img</code> or <code class="bg-slate-100 px-1.5 py-0.5 rounded font-mono text-indigo-600">/api/vid</code></div>
-              <div>• Automatically tracks the website domain via HTTP referer / origin.</div>
-              <div>• When limit reached, shows: <code class="bg-red-50 text-red-700 px-1.5 py-0.5 rounded font-mono">This [domain] hits its max requests</code></div>
+            <div class="text-xs font-mono text-slate-600 bg-slate-50 p-2.5 rounded-lg border border-slate-200/60">
+              /api/img &bull; /api/vid
             </div>
           </div>
 
-          <!-- Tier 2: Free Tier API Key -->
-          <div class="bg-gradient-to-br from-blue-900 via-indigo-950 to-slate-950 text-white p-6 rounded-2xl shadow-md space-y-4 border border-blue-900">
+          <!-- API Key Tier -->
+          <div class="bg-gradient-to-br from-blue-900 to-indigo-950 text-white p-5 rounded-2xl shadow-xs space-y-3 border border-blue-900">
             <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-amber-400 uppercase">Free Tier API Key</span>
+              <span class="text-xs font-bold text-amber-400 uppercase">Developer Key Tier</span>
               <span class="ad-badge bg-amber-400/20 text-amber-300 border-amber-400/40">Higher Quota</span>
             </div>
-            <div class="space-y-1">
-              <div class="text-2xl font-black text-white">60 Requests / 12 Hours</div>
-              <p class="text-xs text-blue-200">Equals 120 total requests per day</p>
+            <div>
+              <div class="text-2xl font-black text-white">120 Requests / Day</div>
+              <p class="text-xs text-blue-200">60 requests per 12-hour rolling window</p>
             </div>
-            <div class="text-xs text-blue-100 space-y-2 pt-2 border-t border-blue-800">
-              <div>• Format: <code class="bg-blue-950/80 px-1.5 py-0.5 rounded font-mono text-amber-300">/api/[yourApiKey]/img</code></div>
-              <div>• Format: <code class="bg-blue-950/80 px-1.5 py-0.5 rounded font-mono text-amber-300">/api/[yourApiKey]/vid</code></div>
-              <div>• 100% Free with instant key generation below.</div>
+            <div class="text-xs font-mono text-amber-300 bg-blue-950/80 p-2.5 rounded-lg border border-blue-800">
+              /api/[apiKey]/img &bull; /api/[apiKey]/vid
             </div>
           </div>
-
         </div>
 
-        <!-- CREATE API KEY FORM -->
-        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-          <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
-            <svg class="w-5 h-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <!-- Create Key Form -->
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+          <h2 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+            <svg class="w-4 h-4 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
               <circle cx="12" cy="12" r="10"></circle>
               <line x1="12" y1="8" x2="12" y2="16"></line>
               <line x1="8" y1="12" x2="16" y2="12"></line>
             </svg>
-            <span>Create Free Tier API Key</span>
+            <span>Create New API Key</span>
           </h2>
 
           <form id="create-api-key-form" class="flex flex-col sm:flex-row items-center gap-3">
-            <div class="w-full sm:flex-1">
-              <input id="api-key-name-input" type="text" placeholder="Enter API Key Name (e.g., My Blog, TechSite App)" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none" />
-            </div>
-            <button type="submit" class="w-full sm:w-auto px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold tracking-wide transition-all shadow cursor-pointer whitespace-nowrap">
-              Generate Free API Key
+            <input id="api-key-name-input" type="text" placeholder="Enter key name (e.g., My Blog, TechSite App)" required class="w-full sm:flex-1 px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+            <button type="submit" class="w-full sm:w-auto px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition-all shadow-xs cursor-pointer whitespace-nowrap">
+              Generate Free Key
             </button>
           </form>
         </div>
 
-        <!-- ACTIVE API KEYS LIST -->
-        <div class="space-y-4">
+        <!-- Active API Keys List -->
+        <div class="space-y-3">
           <div class="flex items-center justify-between">
-            <h2 class="text-base font-bold text-slate-900">Your Generated API Keys</h2>
+            <h2 class="text-sm font-bold text-slate-900">Your Active API Keys</h2>
             <button onclick="fetchApiKeys()" class="text-xs text-blue-600 hover:underline flex items-center gap-1 cursor-pointer">
               <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
-              <span>Refresh Keys</span>
+              <span>Refresh</span>
             </button>
           </div>
 
-          <div id="api-keys-list-container" class="space-y-4">
+          <div id="api-keys-list-container" class="space-y-3">
             <!-- Rendered by app.js -->
           </div>
         </div>
 
-        <!-- LIVE IFRAME SANDBOX & RATE-LIMIT TESTER -->
+        <!-- Live IFrame Sandbox Tester -->
         <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-          <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-            <div>
-              <h2 class="text-base font-bold text-slate-900">Live IFrame Ad Stream Tester</h2>
-              <p class="text-xs text-slate-500">Test how third-party websites receive the blank white HTML with real AdSense ads.</p>
-            </div>
-            <span class="ad-badge bg-blue-50 text-blue-700">Sandbox Preview</span>
+          <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+            <h2 class="text-sm font-bold text-slate-900">Live IFrame Ad Sandbox Tester</h2>
+            <span class="ad-badge bg-blue-50 text-blue-700">Preview</span>
           </div>
 
           <form id="iframe-test-form" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -815,36 +704,32 @@
 
             <div>
               <label for="test-api-key" class="block text-[11px] font-bold text-slate-700 mb-1">API Key (Optional)</label>
-              <input id="test-api-key" type="text" placeholder="Leave empty for domain free tier" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+              <input id="test-api-key" type="text" placeholder="Leave empty for free tier" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none" />
             </div>
 
             <div>
               <label for="test-custom-domain" class="block text-[11px] font-bold text-slate-700 mb-1">Simulate Domain</label>
               <div class="flex gap-2">
-                <input id="test-custom-domain" type="text" placeholder="e.g. example.com" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none" />
-                <button type="submit" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition-colors cursor-pointer whitespace-nowrap">
-                  Load Frame
+                <input id="test-custom-domain" type="text" placeholder="example.com" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+                <button type="submit" class="px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition-colors cursor-pointer whitespace-nowrap">
+                  Load
                 </button>
               </div>
             </div>
           </form>
 
-          <!-- The Live Preview Iframe Container -->
-          <div class="space-y-2">
-            <div class="text-xs font-mono text-slate-400">Rendered IFrame Response:</div>
-            <div class="w-full h-64 bg-white border border-slate-300 rounded-xl overflow-hidden shadow-inner">
-              <iframe id="test-live-iframe" src="/api/img" class="w-full h-full border-0 bg-white" title="Ad Stream Sandbox Preview"></iframe>
-            </div>
+          <div class="w-full h-56 bg-white border border-slate-300 rounded-xl overflow-hidden shadow-inner">
+            <iframe id="test-live-iframe" src="/api/img" class="w-full h-full border-0 bg-white" title="Ad Stream Sandbox Preview"></iframe>
           </div>
         </div>
 
-        <!-- TRACKED DOMAINS MONITOR -->
-        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+        <!-- Tracked Domains Monitor -->
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
           <div class="flex items-center justify-between">
-            <h2 class="text-base font-bold text-slate-900">Tracked Domains &amp; Rate Limits (20 Req/Domain)</h2>
+            <h2 class="text-sm font-bold text-slate-900">Tracked Domains Quota</h2>
             <button onclick="fetchStats()" class="text-xs text-blue-600 hover:underline flex items-center gap-1 cursor-pointer">
               <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
-              <span>Refresh Stats</span>
+              <span>Refresh</span>
             </button>
           </div>
 
@@ -858,43 +743,41 @@
     </main>
 
     <!-- FOOTER -->
-    <footer id="main-footer" class="bg-white border-t border-slate-200 mt-12 py-8 text-slate-600 text-xs">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
-        <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+    <footer id="main-footer" class="bg-white border-t border-slate-200 mt-10 py-6 text-slate-600 text-xs">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
           <div class="flex items-center gap-2">
-            <span class="font-bold text-slate-900 text-sm">plAds</span>
+            <span class="font-bold text-slate-900">plAds</span>
             <span class="text-slate-400">|</span>
-            <span>Real Google AdSense &amp; AdMob Hosting Network</span>
+            <span>Google AdSense &amp; AdMob Hosting Platform</span>
           </div>
           <div class="flex items-center gap-4 text-xs font-medium">
-            <a href="#home" class="hover:text-blue-600 transition-colors">plAds/home</a>
-            <a href="#img" class="hover:text-blue-600 transition-colors">plAds/img</a>
-            <a href="#vid" class="hover:text-blue-600 transition-colors">plAds/vid</a>
-            <a href="#api" class="hover:text-blue-600 transition-colors">/enter/api</a>
+            <a href="#home" class="hover:text-blue-600 transition-colors">Home</a>
+            <a href="#img" class="hover:text-blue-600 transition-colors">Image Ads</a>
+            <a href="#vid" class="hover:text-blue-600 transition-colors">Video Ads</a>
+            <a href="#api" class="hover:text-blue-600 transition-colors">API Keys</a>
             <a href="/api" target="_blank" class="hover:text-blue-600 font-mono transition-colors">/api</a>
             <a href="/ads.txt" target="_blank" class="hover:text-blue-600 font-mono transition-colors">ads.txt</a>
           </div>
         </div>
-        <div class="text-center sm:text-left text-slate-400 text-[11px] pt-2 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <span>Google AdSense Publisher: ca-pub-3659618950683210</span>
+        <div class="text-center sm:text-left text-slate-400 text-[11px] pt-2 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-1">
+          <span>Publisher: ca-pub-3659618950683210</span>
           <span>Endpoints: /api/img, /api/vid, /api/:apiKey/img, /api/:apiKey/vid</span>
         </div>
       </div>
     </footer>
 
     <!-- STICKY REAL ADSENSE BOTTOM BANNER (Offset matched with 42px rail) -->
-    <div id="floating-bottom-ad-banner" class="fixed bottom-0 left-[42px] right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 text-slate-900 px-4 py-2 shadow-2xl">
-      <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+    <div id="floating-bottom-ad-banner" class="fixed bottom-0 left-[42px] right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 text-slate-900 px-4 py-1.5 shadow-xl">
+      <div class="max-w-7xl mx-auto flex items-center justify-between gap-3">
         
-        <div class="flex items-center gap-3">
-          <span class="ad-badge bg-emerald-100 text-emerald-800 border-emerald-300">Sticky AdSense Slot</span>
-          <div class="hidden sm:block text-xs font-medium text-slate-600">
-            Real Google AdSense Unit • ca-pub-3659618950683210
-          </div>
+        <div class="flex items-center gap-2">
+          <span class="ad-badge bg-emerald-100 text-emerald-800 border-emerald-300">Live Ad</span>
+          <span class="hidden sm:inline font-mono text-[10px] text-slate-500">ca-pub-3659618950683210</span>
         </div>
 
-        <div class="flex-1 max-w-xl mx-4">
-          <div class="w-full min-h-[50px] bg-white rounded-lg flex items-center justify-center">
+        <div class="flex-1 max-w-xl mx-2">
+          <div class="w-full min-h-[50px] bg-white rounded flex items-center justify-center">
             <ins class="adsbygoogle"
                  style="display:inline-block; width:100%; height:50px"
                  data-ad-client="ca-pub-3659618950683210"
@@ -904,7 +787,7 @@
         </div>
 
         <div class="flex items-center gap-2">
-          <a href="#api" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-bold transition-colors whitespace-nowrap">
+          <a href="#api" class="px-3 py-1 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-bold transition-colors whitespace-nowrap">
             API Key
           </a>
         </div>

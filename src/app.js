@@ -137,15 +137,14 @@ function closeSidebar() {
 // Push AdSense slots safely
 function triggerAdSensePush() {
   try {
-    if (window.adsbygoogle && Array.isArray(window.adsbygoogle)) {
-      document.querySelectorAll('.adsbygoogle:not([data-adsbygoogle-status])').forEach(() => {
-        try {
-          (window.adsbygoogle = window.adsbygoogle || []).push({});
-        } catch (e) {
-          // ignore duplicate push
-        }
-      });
-    }
+    const slots = document.querySelectorAll('ins.adsbygoogle:not([data-adsbygoogle-status])');
+    slots.forEach(() => {
+      try {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      } catch (e) {
+        // ignore duplicate push
+      }
+    });
   } catch (err) {
     // silent fallback
   }
